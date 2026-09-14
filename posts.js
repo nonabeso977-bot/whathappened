@@ -466,7 +466,154 @@ const Posts = {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {const imageInput =
+    document.getElementById("postImage");
 
+const imagePreview =
+    document.getElementById("imagePreview");
+
+let selectedImage = null;
+
+
+if (imageInput) {
+
+    imageInput.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                imageInput.files[0];
+
+            if (!file) {
+
+                selectedImage = null;
+
+                if (imagePreview) {
+                    imagePreview.innerHTML = "";
+                }
+
+                return;
+            }
+
+
+            if (!file.type.startsWith("image/")) {
+
+                App.showMessage(
+                    "مش صورة 🗿",
+                    "اختاري ملف صورة فقط."
+                );
+
+                imageInput.value = "";
+
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload = event => {
+
+                selectedImage =
+                    event.target.result;
+
+
+                if (imagePreview) {
+
+                    imagePreview.innerHTML = `
+                        <img
+                            src="${selectedImage}"
+                            alt="معاينة الصورة"
+                        >
+                    `;
+
+                }
+
+            };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+}
+const imageInput =
+    document.getElementById("postImage");
+
+const imagePreview =
+    document.getElementById("imagePreview");
+
+let selectedImage = null;
+
+
+if (imageInput) {
+
+    imageInput.addEventListener(
+        "change",
+        () => {
+
+            const file =
+                imageInput.files[0];
+
+            if (!file) {
+
+                selectedImage = null;
+
+                if (imagePreview) {
+                    imagePreview.innerHTML = "";
+                }
+
+                return;
+            }
+
+
+            if (!file.type.startsWith("image/")) {
+
+                App.showMessage(
+                    "مش صورة 🗿",
+                    "اختاري ملف صورة فقط."
+                );
+
+                imageInput.value = "";
+
+                return;
+            }
+
+
+            const reader =
+                new FileReader();
+
+
+            reader.onload = event => {
+
+                selectedImage =
+                    event.target.result;
+
+
+                if (imagePreview) {
+
+                    imagePreview.innerHTML = `
+                        <img
+                            src="${selectedImage}"
+                            alt="معاينة الصورة"
+                        >
+                    `;
+
+                }
+
+            };
+
+
+            reader.readAsDataURL(file);
+
+        }
+    );
+
+}
         const container =
             document.getElementById(
                 "postsContainer"
