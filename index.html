@@ -3,27 +3,17 @@
 
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Friends Boxes Open ♡</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-    <!-- الصفحة الرئيسية -->
-    <main
-        id="homePage"
-        class="page active"
-    >
+    <!-- الرئيسية -->
+    <main id="homePage" class="page active">
 
         <header class="top-bar">
             <div>
@@ -41,7 +31,7 @@
         </header>
 
 
-        <!-- الشعور اليومي -->
+        <!-- الشعور الحالي -->
         <section class="card feeling-card">
 
             <div class="section-title">
@@ -79,12 +69,8 @@
     </main>
 
 
-
-    <!-- صفحة الملف الشخصي -->
-    <main
-        id="profilePage"
-        class="page"
-    >
+    <!-- الملف الشخصي -->
+    <main id="profilePage" class="page">
 
         <header class="page-header">
             <h2>ملفي ♡</h2>
@@ -110,23 +96,13 @@
         <section class="card stats-card">
 
             <div class="stat">
-                <strong id="postCount">
-                    0
-                </strong>
-
-                <span>
-                    منشورات
-                </span>
+                <strong id="postCount">0</strong>
+                <span>منشورات</span>
             </div>
 
             <div class="stat">
-                <strong id="likeCount">
-                    0
-                </strong>
-
-                <span>
-                    إعجابات
-                </span>
+                <strong id="likeCount">0</strong>
+                <span>إعجابات</span>
             </div>
 
         </section>
@@ -134,12 +110,8 @@
     </main>
 
 
-
-    <!-- صفحة المشاعر -->
-    <main
-        id="feelingsPage"
-        class="page"
-    >
+    <!-- المشاعر -->
+    <main id="feelingsPage" class="page">
 
         <header class="page-header">
             <h2>شعورك اليوم ♡</h2>
@@ -217,12 +189,8 @@
     </main>
 
 
-
     <!-- Friends Box -->
-    <main
-        id="friendsPage"
-        class="page"
-    >
+    <main id="friendsPage" class="page">
 
         <header class="page-header">
             <h2>Friends Box ♡</h2>
@@ -242,6 +210,8 @@
                 شاركي الكود مع أصدقائك وخلي الصندوق يجمعكم.
             </p>
 
+
+            <!-- الكود الخاص بي -->
             <div class="code-box">
 
                 <span id="friendCode">
@@ -258,17 +228,62 @@
 
             </div>
 
+
+            <!-- إضافة صديق -->
+            <div class="add-friend-box">
+
+                <h3>
+                    إضافة صديق ♡
+                </h3>
+
+                <p>
+                    اكتبي كود صديقك لإضافته.
+                </p>
+
+                <input
+                    id="friendCodeInput"
+                    type="text"
+                    placeholder="FRIEND-0000"
+                    maxlength="20"
+                    autocomplete="off"
+                >
+
+                <button
+                    id="addFriendButton"
+                    class="primary-button"
+                    type="button"
+                >
+                    ＋ إضافة صديق
+                </button>
+
+            </div>
+
+
+            <!-- الأصدقاء -->
+            <div class="friends-list-section">
+
+                <h3>
+                    أصدقائي ♡
+                </h3>
+
+                <div
+                    id="friendsList"
+                    class="friends-list"
+                >
+                    <p class="empty-friends">
+                        ما عندكش أصدقاء مضافين لحد الآن ♡
+                    </p>
+                </div>
+
+            </div>
+
         </section>
 
     </main>
 
 
-
-    <!-- صفحة التذكيرات -->
-    <main
-        id="remindersPage"
-        class="page"
-    >
+    <!-- التذكيرات -->
+    <main id="remindersPage" class="page">
 
         <header class="page-header">
             <h2>تذكيراتي ♡</h2>
@@ -297,7 +312,6 @@
         </section>
 
     </main>
-
 
 
     <!-- الشريط السفلي -->
@@ -351,12 +365,8 @@
     </nav>
 
 
-
     <!-- نافذة إنشاء منشور -->
-    <div
-        id="postModal"
-        class="modal"
-    >
+    <div id="postModal" class="modal">
 
         <div class="modal-content">
 
@@ -384,7 +394,7 @@
             ></textarea>
 
 
-            <!-- إضافة صورة -->
+            <!-- الصورة -->
             <div class="image-upload-area">
 
                 <label
@@ -416,9 +426,7 @@
                     من يستطيع رؤية المنشور؟
                 </label>
 
-                <select
-                    id="postVisibility"
-                >
+                <select id="postVisibility">
 
                     <option value="everyone">
                         الجميع
@@ -450,12 +458,8 @@
     </div>
 
 
-
     <!-- نافذة الرسائل -->
-    <div
-        id="messageModal"
-        class="modal"
-    >
+    <div id="messageModal" class="modal">
 
         <div class="modal-content small-modal">
 
@@ -477,8 +481,7 @@
     </div>
 
 
-
-    <!-- ملفات JavaScript -->
+    <!-- JavaScript -->
     <script src="storage.js"></script>
     <script src="posts.js"></script>
     <script src="feelings.js"></script>
