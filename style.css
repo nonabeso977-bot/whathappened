@@ -1341,3 +1341,97 @@ select {
         bottom: 8px;
     }
   }
+/* ========================================
+   صور المنشورات
+======================================== */
+
+.image-upload-area {
+    margin-top: 12px;
+}
+
+
+.image-upload-button {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+
+    padding: 10px 15px;
+
+    border-radius: 14px;
+
+    background: #eaf7ff;
+
+    color: #4b8fb8;
+
+    border: 1px solid #cfeaf8;
+
+    font-size: 14px;
+
+    cursor: pointer;
+
+    transition:
+        transform 0.2s ease,
+        background 0.2s ease;
+}
+
+
+.image-upload-button:hover {
+    background: #dff3ff;
+
+    transform: translateY(-1px);
+}
+
+
+.image-upload-button:active {
+    transform: scale(0.97);
+}
+
+
+/* ========================================
+   معاينة الصورة قبل النشر
+======================================== */
+
+.image-preview {
+    margin-top: 12px;
+}
+
+
+.image-preview img {
+    display: block;
+
+    width: 100%;
+
+    max-height: 260px;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+
+    border: 1px solid #d9edf7;
+}
+
+
+/* ========================================
+   الصورة داخل المنشور
+======================================== */
+
+.post-image {
+    margin-top: 12px;
+
+    overflow: hidden;
+
+    border-radius: 18px;
+}
+
+
+.post-image img {
+    display: block;
+
+    width: 100%;
+
+    max-height: 420px;
+
+    object-fit: cover;
+
+    border-radius: 18px;
+}
