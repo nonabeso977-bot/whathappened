@@ -120,9 +120,11 @@ const App = {
 
 
             if (container) {
+
                 Posts.render(
                     container
                 );
+
             }
 
 
@@ -352,7 +354,7 @@ const App = {
 
 
     /* ========================================
-       إنشاء صندوق أصدقاء
+       Friends Box
     ======================================== */
 
     createFriendsBox() {
@@ -412,7 +414,9 @@ const App = {
         Storage.save(
             "friends_box",
             {
-                code: code,
+                code:
+                    code,
+
                 createdAt:
                     new Date().toISOString()
             }
@@ -442,10 +446,6 @@ const App = {
 
     },
 
-
-    /* ========================================
-       إنشاء رمز عشوائي
-    ======================================== */
 
     generateBoxCode() {
 
@@ -479,10 +479,6 @@ const App = {
 
     },
 
-
-    /* ========================================
-       فتح صندوق
-    ======================================== */
 
     openFriendsBox() {
 
@@ -604,6 +600,113 @@ document.addEventListener(
     "DOMContentLoaded",
     () => {
 
+        /* ==================================
+           اختيار الصور
+        ================================== */
+
+        const imageInput =
+            document.getElementById(
+                "postImage"
+            );
+
+
+        const imagePreview =
+            document.getElementById(
+                "imagePreview"
+            );
+
+
+        let selectedImage = null;
+
+
+        if (imageInput) {
+
+            imageInput.addEventListener(
+                "change",
+                () => {
+
+                    const file =
+                        imageInput.files[0];
+
+
+                    if (!file) {
+
+                        selectedImage =
+                            null;
+
+
+                        if (imagePreview) {
+
+                            imagePreview.innerHTML =
+                                "";
+
+                        }
+
+
+                        return;
+
+                    }
+
+
+                    if (
+                        !file.type.startsWith(
+                            "image/"
+                        )
+                    ) {
+
+                        App.showMessage(
+                            "مش صورة 🗿",
+                            "اختاري ملف صورة فقط."
+                        );
+
+
+                        imageInput.value =
+                            "";
+
+
+                        return;
+
+                    }
+
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload =
+                        event => {
+
+                            selectedImage =
+                                event.target.result;
+
+
+                            if (
+                                imagePreview
+                            ) {
+
+                                imagePreview.innerHTML = `
+
+                                    <img
+                                        src="${selectedImage}"
+                                        alt="معاينة الصورة"
+                                    >
+
+                                `;
+
+                            }
+
+                        };
+
+
+                    reader.readAsDataURL(
+                        file
+                    );
+
+                }
+            );
+
+        }
+
 
         /* ==================================
            التنقل السفلي
@@ -684,7 +787,7 @@ document.addEventListener(
 
 
         /* ==================================
-           زر إحساس اليوم
+           إحساس اليوم
         ================================== */
 
         const feelingButton =
@@ -732,7 +835,30 @@ document.addEventListener(
 
 
                     if (textarea) {
-                        textarea.value = "";
+
+                        textarea.value =
+                            "";
+
+                    }
+
+
+                    selectedImage =
+                        null;
+
+
+                    if (imageInput) {
+
+                        imageInput.value =
+                            "";
+
+                    }
+
+
+                    if (imagePreview) {
+
+                        imagePreview.innerHTML =
+                            "";
+
                     }
 
 
@@ -745,7 +871,9 @@ document.addEventListener(
 
                         setTimeout(
                             () => {
+
                                 textarea.focus();
+
                             },
                             100
                         );
@@ -796,7 +924,8 @@ document.addEventListener(
                             textarea.value,
                             visibility
                                 ? visibility.value
-                                : "everyone"
+                                : "everyone",
+                            selectedImage
                         );
 
 
@@ -804,15 +933,37 @@ document.addEventListener(
 
                         App.showMessage(
                             "المنشور فاضي 🗿",
-                            "اكتبي شيئًا أولًا قبل النشر."
+                            "اكتبي نصًا أو أضيفي صورة أولًا."
                         );
+
 
                         return;
 
                     }
 
 
-                    textarea.value = "";
+                    textarea.value =
+                        "";
+
+
+                    selectedImage =
+                        null;
+
+
+                    if (imageInput) {
+
+                        imageInput.value =
+                            "";
+
+                    }
+
+
+                    if (imagePreview) {
+
+                        imagePreview.innerHTML =
+                            "";
+
+                    }
 
 
                     App.closeModal(
@@ -943,121 +1094,3 @@ document.addEventListener(
             remindersButton.addEventListener(
                 "click",
                 () => {
-
-                    App.showPage(
-                        "remindersPage"
-                    );
-
-                }
-            );
-
-        }
-
-
-        /* ==================================
-           إغلاق المودالات
-        ================================== */
-
-        document
-            .querySelectorAll(
-                "[data-close]"
-            )
-            .forEach(button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        App.closeModal(
-                            button.dataset.close
-                        );
-
-                    }
-                );
-
-            });
-
-
-        /* ==================================
-           إغلاق عند الضغط خارج النافذة
-        ================================== */
-
-        document
-            .querySelectorAll(
-                ".modal"
-            )
-            .forEach(modal => {
-
-                modal.addEventListener(
-                    "click",
-                    event => {
-
-                        if (
-                            event.target ===
-                            modal
-                        ) {
-
-                            App.closeModal(
-                                modal.id
-                            );
-
-                        }
-
-                    }
-                );
-
-            });
-
-
-        /* ==================================
-           زر ESC لإغلاق النوافذ
-        ================================== */
-
-        document.addEventListener(
-            "keydown",
-            event => {
-
-                if (
-                    event.key !==
-                    "Escape"
-                ) {
-                    return;
-                }
-
-
-                document
-                    .querySelectorAll(
-                        ".modal.active"
-                    )
-                    .forEach(modal => {
-
-                        App.closeModal(
-                            modal.id
-                        );
-
-                    });
-
-            }
-        );
-
-
-        /* ==================================
-           التشغيل الأول
-        ================================== */
-
-        App.showPage(
-            "homePage"
-        );
-
-
-        Feelings.renderHome();
-
-        Feelings.renderProfile();
-
-        Reminders.render();
-
-        Reminders.renderStreak();
-
-
-    }
-);
