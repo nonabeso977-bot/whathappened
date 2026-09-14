@@ -610,7 +610,22 @@
             </h2>
 
             <textarea
-                id="postText"
+             <div class="image-upload-area">
+
+    <label for="postImage" class="image-upload-button">
+        📷 إضافة صورة
+    </label>
+
+    <input
+        type="file"
+        id="postImage"
+        accept="image/*"
+        hidden
+    >
+
+    <div id="imagePreview" class="image-preview"></div>
+
+</div>   id="postText"
                 placeholder="اكتب شيئًا..."
                 maxlength="1000"
             ></textarea>
