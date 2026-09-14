@@ -3,14 +3,10 @@
    Posts System
 ======================================== */
 
-
-/* ========================================
-   إعدادات المنشورات
-======================================== */
-
 const Posts = {
 
     storageKey: "posts",
+
 
     getAll() {
 
@@ -18,6 +14,7 @@ const Posts = {
             this.storageKey,
             []
         );
+
     },
 
 
@@ -27,84 +24,146 @@ const Posts = {
             this.storageKey,
             posts
         );
+
     },
 
 
-    create(text, visibility = "everyone") {
+    /* ========================================
+       إنشاء منشور
+    ======================================== */
+
+    create(
+        text,
+        visibility = "everyone",
+        image = null
+    ) {
 
         const cleanText =
             text.trim();
 
-        if (!cleanText) {
+
+        if (!cleanText && !image) {
             return null;
         }
+
 
         const posts =
             this.getAll();
 
+
         const newPost = {
 
-            id: Storage.createId("post"),
+            id:
+                Storage.createId("post"),
+
 
             author: {
-                name: "مستخدم جديد",
-                avatar: "♡"
+
+                name:
+                    "مستخدم جديد",
+
+                avatar:
+                    "♡"
+
             },
 
-            text: cleanText,
 
-            visibility: visibility,
+            text:
+                cleanText,
+
+
+            image:
+                image,
+
+
+            visibility:
+                visibility,
+
 
             likes: [],
 
+
             comments: [],
+
 
             createdAt:
                 new Date().toISOString()
+
         };
 
 
-        posts.unshift(newPost);
+        posts.unshift(
+            newPost
+        );
 
-        this.saveAll(posts);
+
+        this.saveAll(
+            posts
+        );
+
 
         return newPost;
+
     },
 
+
+    /* ========================================
+       حذف منشور
+    ======================================== */
 
     delete(postId) {
 
         const posts =
             this.getAll();
 
+
         const updated =
             posts.filter(
-                post => post.id !== postId
+                post =>
+                    post.id !== postId
             );
 
-        this.saveAll(updated);
+
+        this.saveAll(
+            updated
+        );
+
 
         return true;
+
     },
 
+
+    /* ========================================
+       إعجاب
+    ======================================== */
 
     toggleLike(postId) {
 
         const posts =
             this.getAll();
 
+
         const post =
             posts.find(
-                item => item.id === postId
+                item =>
+                    item.id === postId
             );
+
 
         if (!post) {
             return null;
         }
 
 
-        if (!Array.isArray(post.likes)) {
+        if (
+            !Array.isArray(
+                post.likes
+            )
+        ) {
+
             post.likes = [];
+
         }
 
 
@@ -113,29 +172,49 @@ const Posts = {
 
 
         const index =
-            post.likes.indexOf(userId);
+            post.likes.indexOf(
+                userId
+            );
 
 
         if (index === -1) {
 
-            post.likes.push(userId);
+            post.likes.push(
+                userId
+            );
 
         } else {
 
-            post.likes.splice(index, 1);
+            post.likes.splice(
+                index,
+                1
+            );
+
         }
 
 
-        this.saveAll(posts);
+        this.saveAll(
+            posts
+        );
+
 
         return post;
+
     },
 
 
-    addComment(postId, text) {
+    /* ========================================
+       إضافة تعليق
+    ======================================== */
+
+    addComment(
+        postId,
+        text
+    ) {
 
         const cleanText =
             text.trim();
+
 
         if (!cleanText) {
             return null;
@@ -145,9 +224,11 @@ const Posts = {
         const posts =
             this.getAll();
 
+
         const post =
             posts.find(
-                item => item.id === postId
+                item =>
+                    item.id === postId
             );
 
 
@@ -156,31 +237,57 @@ const Posts = {
         }
 
 
-        if (!Array.isArray(post.comments)) {
+        if (
+            !Array.isArray(
+                post.comments
+            )
+        ) {
+
             post.comments = [];
+
         }
 
 
         const comment = {
 
-            id: Storage.createId("comment"),
+            id:
+                Storage.createId(
+                    "comment"
+                ),
 
-            author: "مستخدم جديد",
 
-            text: cleanText,
+            author:
+                "مستخدم جديد",
+
+
+            text:
+                cleanText,
+
 
             createdAt:
                 new Date().toISOString()
+
         };
 
 
-        post.comments.push(comment);
+        post.comments.push(
+            comment
+        );
 
-        this.saveAll(posts);
+
+        this.saveAll(
+            posts
+        );
+
 
         return comment;
+
     },
 
+
+    /* ========================================
+       المنشورات الظاهرة
+    ======================================== */
 
     getVisiblePosts() {
 
@@ -188,46 +295,71 @@ const Posts = {
             this.getAll();
 
 
-        /*
-         * في النسخة الحالية نحن مستخدم واحد
-         * لذلك المنشورات الخاصة بنا تظهر لنا.
-         *
-         * لاحقًا عند إضافة حسابات حقيقية
-         * نقدر نضيف نظام أصدقاء كامل.
-         */
+        return posts.filter(
+            post => {
 
-        return posts.filter(post => {
+                return (
+                    post.visibility ===
+                        "everyone" ||
 
-            return (
-                post.visibility === "everyone" ||
-                post.visibility === "friends" ||
-                post.visibility === "private" ||
-                post.visibility === "selected"
-            );
+                    post.visibility ===
+                        "friends" ||
 
-        });
+                    post.visibility ===
+                        "private" ||
+
+                    post.visibility ===
+                        "selected"
+                );
+
+            }
+        );
+
     },
 
 
-    formatDate(dateString) {
+    /* ========================================
+       تنسيق التاريخ
+    ======================================== */
+
+    formatDate(
+        dateString
+    ) {
 
         const date =
-            new Date(dateString);
+            new Date(
+                dateString
+            );
 
-        if (Number.isNaN(date.getTime())) {
+
+        if (
+            Number.isNaN(
+                date.getTime()
+            )
+        ) {
+
             return "";
+
         }
 
 
         return date.toLocaleString(
             "ar-LY",
             {
-                dateStyle: "medium",
-                timeStyle: "short"
+                dateStyle:
+                    "medium",
+
+                timeStyle:
+                    "short"
             }
         );
+
     },
 
+
+    /* ========================================
+       عرض المنشورات
+    ======================================== */
 
     render(container) {
 
@@ -240,10 +372,13 @@ const Posts = {
             this.getVisiblePosts();
 
 
-        container.innerHTML = "";
+        container.innerHTML =
+            "";
 
 
-        if (posts.length === 0) {
+        if (
+            posts.length === 0
+        ) {
 
             container.innerHTML = `
 
@@ -269,24 +404,41 @@ const Posts = {
             `;
 
             return;
+
         }
 
 
-        posts.forEach(post => {
+        posts.forEach(
+            post => {
 
-            const card =
-                this.createPostElement(post);
+                const card =
+                    this.createPostElement(
+                        post
+                    );
 
-            container.appendChild(card);
 
-        });
+                container.appendChild(
+                    card
+                );
+
+            }
+        );
+
     },
 
 
-    createPostElement(post) {
+    /* ========================================
+       إنشاء بطاقة المنشور
+    ======================================== */
+
+    createPostElement(
+        post
+    ) {
 
         const article =
-            document.createElement("article");
+            document.createElement(
+                "article"
+            );
 
 
         article.className =
@@ -298,20 +450,41 @@ const Posts = {
 
 
         const likes =
-            Array.isArray(post.likes)
+            Array.isArray(
+                post.likes
+            )
                 ? post.likes.length
                 : 0;
 
 
         const comments =
-            Array.isArray(post.comments)
+            Array.isArray(
+                post.comments
+            )
                 ? post.comments.length
                 : 0;
 
 
         const liked =
-            Array.isArray(post.likes) &&
-            post.likes.includes("local_user");
+            Array.isArray(
+                post.likes
+            ) &&
+            post.likes.includes(
+                "local_user"
+            );
+
+
+        const imageHTML =
+            post.image
+                ? `
+                    <div class="post-image">
+                        <img
+                            src="${post.image}"
+                            alt="صورة المنشور"
+                        >
+                    </div>
+                  `
+                : "";
 
 
         article.innerHTML = `
@@ -319,7 +492,9 @@ const Posts = {
             <div class="post-header">
 
                 <div class="post-avatar">
-                    ${post.author.avatar}
+                    ${this.escapeHTML(
+                        post.author.avatar
+                    )}
                 </div>
 
                 <div>
@@ -341,11 +516,20 @@ const Posts = {
             </div>
 
 
-            <div class="post-text">
-                ${this.escapeHTML(
-                    post.text
-                )}
-            </div>
+            ${
+                post.text
+                    ? `
+                        <div class="post-text">
+                            ${this.escapeHTML(
+                                post.text
+                            )}
+                        </div>
+                      `
+                    : ""
+            }
+
+
+            ${imageHTML}
 
 
             <div class="post-actions">
@@ -356,7 +540,12 @@ const Posts = {
                     data-action="like"
                     data-id="${post.id}"
                 >
-                    ${liked ? "♥" : "♡"}
+                    ${
+                        liked
+                            ? "♥"
+                            : "♡"
+                    }
+
                     ${likes}
                 </button>
 
@@ -387,8 +576,13 @@ const Posts = {
 
 
         return article;
+
     },
 
+
+    /* ========================================
+       حماية HTML
+    ======================================== */
 
     escapeHTML(text) {
 
@@ -418,8 +612,13 @@ const Posts = {
                 /'/g,
                 "&#039;"
             );
+
     },
 
+
+    /* ========================================
+       إحصائيات الملف الشخصي
+    ======================================== */
 
     getStats() {
 
@@ -432,28 +631,49 @@ const Posts = {
         let comments = 0;
 
 
-        posts.forEach(post => {
+        posts.forEach(
+            post => {
 
-            if (Array.isArray(post.likes)) {
-                likes += post.likes.length;
+                if (
+                    Array.isArray(
+                        post.likes
+                    )
+                ) {
+
+                    likes +=
+                        post.likes.length;
+
+                }
+
+
+                if (
+                    Array.isArray(
+                        post.comments
+                    )
+                ) {
+
+                    comments +=
+                        post.comments.length;
+
+                }
+
             }
-
-            if (Array.isArray(post.comments)) {
-                comments += post.comments.length;
-            }
-
-        });
+        );
 
 
         return {
 
-            posts: posts.length,
+            posts:
+                posts.length,
 
-            likes: likes,
+            likes:
+                likes,
 
-            comments: comments
+            comments:
+                comments
 
         };
+
     }
 
 };
@@ -466,154 +686,7 @@ const Posts = {
 document.addEventListener(
     "DOMContentLoaded",
     () => {
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {const imageInput =
-    document.getElementById("postImage");
 
-const imagePreview =
-    document.getElementById("imagePreview");
-
-let selectedImage = null;
-
-
-if (imageInput) {
-
-    imageInput.addEventListener(
-        "change",
-        () => {
-
-            const file =
-                imageInput.files[0];
-
-            if (!file) {
-
-                selectedImage = null;
-
-                if (imagePreview) {
-                    imagePreview.innerHTML = "";
-                }
-
-                return;
-            }
-
-
-            if (!file.type.startsWith("image/")) {
-
-                App.showMessage(
-                    "مش صورة 🗿",
-                    "اختاري ملف صورة فقط."
-                );
-
-                imageInput.value = "";
-
-                return;
-            }
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload = event => {
-
-                selectedImage =
-                    event.target.result;
-
-
-                if (imagePreview) {
-
-                    imagePreview.innerHTML = `
-                        <img
-                            src="${selectedImage}"
-                            alt="معاينة الصورة"
-                        >
-                    `;
-
-                }
-
-            };
-
-
-            reader.readAsDataURL(file);
-
-        }
-    );
-
-}
-const imageInput =
-    document.getElementById("postImage");
-
-const imagePreview =
-    document.getElementById("imagePreview");
-
-let selectedImage = null;
-
-
-if (imageInput) {
-
-    imageInput.addEventListener(
-        "change",
-        () => {
-
-            const file =
-                imageInput.files[0];
-
-            if (!file) {
-
-                selectedImage = null;
-
-                if (imagePreview) {
-                    imagePreview.innerHTML = "";
-                }
-
-                return;
-            }
-
-
-            if (!file.type.startsWith("image/")) {
-
-                App.showMessage(
-                    "مش صورة 🗿",
-                    "اختاري ملف صورة فقط."
-                );
-
-                imageInput.value = "";
-
-                return;
-            }
-
-
-            const reader =
-                new FileReader();
-
-
-            reader.onload = event => {
-
-                selectedImage =
-                    event.target.result;
-
-
-                if (imagePreview) {
-
-                    imagePreview.innerHTML = `
-                        <img
-                            src="${selectedImage}"
-                            alt="معاينة الصورة"
-                        >
-                    `;
-
-                }
-
-            };
-
-
-            reader.readAsDataURL(file);
-
-        }
-    );
-
-}
         const container =
             document.getElementById(
                 "postsContainer"
@@ -625,7 +698,9 @@ if (imageInput) {
         }
 
 
-        Posts.render(container);
+        Posts.render(
+            container
+        );
 
 
         container.addEventListener(
@@ -651,25 +726,41 @@ if (imageInput) {
                     button.dataset.id;
 
 
-                if (action === "like") {
+                if (
+                    action === "like"
+                ) {
 
-                    Posts.toggleLike(postId);
-
-                    Posts.render(container);
-
-                }
+                    Posts.toggleLike(
+                        postId
+                    );
 
 
-                if (action === "delete") {
-
-                    Posts.delete(postId);
-
-                    Posts.render(container);
+                    Posts.render(
+                        container
+                    );
 
                 }
 
 
-                if (action === "comment") {
+                if (
+                    action === "delete"
+                ) {
+
+                    Posts.delete(
+                        postId
+                    );
+
+
+                    Posts.render(
+                        container
+                    );
+
+                }
+
+
+                if (
+                    action === "comment"
+                ) {
 
                     const text =
                         prompt(
@@ -687,7 +778,11 @@ if (imageInput) {
                             text
                         );
 
-                        Posts.render(container);
+
+                        Posts.render(
+                            container
+                        );
+
                     }
 
                 }
