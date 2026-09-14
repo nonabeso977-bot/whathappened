@@ -3,370 +3,536 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
 
     <title>Friends Boxes Open ♡</title>
 
-    <link rel="stylesheet" href="style.css">
+    <link
+        rel="stylesheet"
+        href="style.css"
+    >
 </head>
 
 <body>
 
-    <!-- الرئيسية -->
-    <main id="homePage" class="page active">
+    <!-- =========================
+         التطبيق
+    ========================== -->
 
-        <header class="top-bar">
-            <div>
-                <h1>Friends Boxes ♡</h1>
-                <p>افتح صندوق أصدقائك اليوم</p>
-            </div>
-
-            <button
-                id="openPostButton"
-                class="icon-button"
-                type="button"
-            >
-                ＋
-            </button>
-        </header>
+    <div id="app">
 
 
-        <!-- الشعور الحالي -->
-        <section class="card feeling-card">
+        <!-- =========================
+             الصفحة الرئيسية
+        ========================== -->
 
-            <div class="section-title">
-                <span>شعورك اليوم</span>
-                <span>♡</span>
-            </div>
+        <section
+            id="homePage"
+            class="page active"
+        >
 
-            <div id="currentFeeling">
-                لم تختاري شعورك بعد
-            </div>
+            <header class="top-header">
 
-            <button
-                id="goFeelingsButton"
-                class="secondary-button"
-                type="button"
-            >
-                اختاري شعورك
-            </button>
+                <div class="header-title">
 
-        </section>
+                    <h1>
+                        Friends Boxes Open ♡
+                    </h1>
 
+                    <p>
+                        مكان صغير للأصدقاء
+                    </p>
 
-        <!-- المنشورات -->
-        <section class="posts-section">
-
-            <div class="section-title">
-                <span>آخر المنشورات</span>
-                <span>✦</span>
-            </div>
-
-            <div id="postsContainer"></div>
-
-        </section>
-
-    </main>
-
-
-    <!-- الملف الشخصي -->
-    <main id="profilePage" class="page">
-
-        <header class="page-header">
-            <h2>ملفي ♡</h2>
-        </header>
-
-        <section class="card profile-card">
-
-            <div class="profile-avatar">
-                ♡
-            </div>
-
-            <h2 id="profileName">
-                مستخدم جديد
-            </h2>
-
-            <p id="profileBio">
-                أهلا بك في Friends Boxes
-            </p>
-
-        </section>
-
-
-        <section class="card stats-card">
-
-            <div class="stat">
-                <strong id="postCount">0</strong>
-                <span>منشورات</span>
-            </div>
-
-            <div class="stat">
-                <strong id="likeCount">0</strong>
-                <span>إعجابات</span>
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- المشاعر -->
-    <main id="feelingsPage" class="page">
-
-        <header class="page-header">
-            <h2>شعورك اليوم ♡</h2>
-        </header>
-
-        <section class="card">
-
-            <p class="page-description">
-                اختاري الشيء اللي يشبه مزاجك اليوم
-            </p>
-
-            <div
-                id="feelingsContainer"
-                class="feelings-grid"
-            >
+                </div>
 
                 <button
-                    class="feeling-button"
-                    data-feeling="سعيدة"
-                    type="button"
-                >
-                    ☀️
-                    <span>سعيدة</span>
-                </button>
-
-                <button
-                    class="feeling-button"
-                    data-feeling="هادئة"
-                    type="button"
-                >
-                    🌸
-                    <span>هادئة</span>
-                </button>
-
-                <button
-                    class="feeling-button"
-                    data-feeling="متعبة"
-                    type="button"
-                >
-                    💤
-                    <span>متعبة</span>
-                </button>
-
-                <button
-                    class="feeling-button"
-                    data-feeling="حزينة"
-                    type="button"
-                >
-                    🌧️
-                    <span>حزينة</span>
-                </button>
-
-                <button
-                    class="feeling-button"
-                    data-feeling="متحمسة"
-                    type="button"
-                >
-                    ✨
-                    <span>متحمسة</span>
-                </button>
-
-                <button
-                    class="feeling-button"
-                    data-feeling="غاضبة"
-                    type="button"
-                >
-                    🔥
-                    <span>غاضبة</span>
-                </button>
-
-            </div>
-
-        </section>
-
-    </main>
-
-
-    <!-- Friends Box -->
-    <main id="friendsPage" class="page">
-
-        <header class="page-header">
-            <h2>Friends Box ♡</h2>
-        </header>
-
-        <section class="card friends-card">
-
-            <div class="box-icon">
-                ♡
-            </div>
-
-            <h2>
-                صندوق الأصدقاء
-            </h2>
-
-            <p>
-                شاركي الكود مع أصدقائك وخلي الصندوق يجمعكم.
-            </p>
-
-
-            <!-- الكود الخاص بي -->
-            <div class="code-box">
-
-                <span id="friendCode">
-                    FRIEND-0000
-                </span>
-
-                <button
-                    id="copyFriendCode"
-                    class="secondary-button"
-                    type="button"
-                >
-                    نسخ الكود
-                </button>
-
-            </div>
-
-
-            <!-- إضافة صديق -->
-            <div class="add-friend-box">
-
-                <h3>
-                    إضافة صديق ♡
-                </h3>
-
-                <p>
-                    اكتبي كود صديقك لإضافته.
-                </p>
-
-                <input
-                    id="friendCodeInput"
-                    type="text"
-                    placeholder="FRIEND-0000"
-                    maxlength="20"
-                    autocomplete="off"
-                >
-
-                <button
-                    id="addFriendButton"
+                    id="openPostButton"
                     class="primary-button"
                     type="button"
                 >
-                    ＋ إضافة صديق
+                    + منشور
                 </button>
 
-            </div>
+            </header>
 
 
-            <!-- الأصدقاء -->
-            <div class="friends-list-section">
+            <main class="page-content">
 
-                <h3>
-                    أصدقائي ♡
-                </h3>
+                <!-- الشعور -->
 
-                <div
-                    id="friendsList"
-                    class="friends-list"
-                >
-                    <p class="empty-friends">
-                        ما عندكش أصدقاء مضافين لحد الآن ♡
-                    </p>
+                <div class="feeling-card">
+
+                    <div>
+
+                        <span class="small-label">
+                            شعورك اليوم
+                        </span>
+
+                        <div
+                            id="currentFeeling"
+                            class="current-feeling"
+                        >
+                            كيف تشعر اليوم؟ ♡
+                        </div>
+
+                    </div>
+
+                    <button
+                        id="goFeelingsButton"
+                        class="secondary-button"
+                        type="button"
+                    >
+                        تغيير
+                    </button>
+
                 </div>
 
-            </div>
+
+                <!-- المنشورات -->
+
+                <div
+                    id="postsContainer"
+                    class="posts-container"
+                ></div>
+
+            </main>
 
         </section>
 
-    </main>
 
 
-    <!-- التذكيرات -->
-    <main id="remindersPage" class="page">
+        <!-- =========================
+             صفحة المشاعر
+        ========================== -->
 
-        <header class="page-header">
-            <h2>تذكيراتي ♡</h2>
-        </header>
+        <section
+            id="feelingsPage"
+            class="page"
+        >
 
-        <section class="card">
+            <header class="page-header">
 
-            <div class="section-title">
-                <span>التذكيرات</span>
-                <span>✦</span>
-            </div>
+                <h2>
+                    كيف تشعر اليوم؟ ♡
+                </h2>
 
-            <div
-                id="remindersContainer"
-                class="reminders-list"
-            ></div>
+                <p>
+                    اختار الشعور الأقرب لك
+                </p>
+
+            </header>
+
+
+            <main class="page-content">
+
+                <div
+                    id="feelingsContainer"
+                    class="feelings-container"
+                >
+
+                    <button
+                        class="feeling-option"
+                        data-feeling="happy"
+                        type="button"
+                    >
+                        <span class="feeling-icon">
+                            ☀️
+                        </span>
+
+                        <span>
+                            سعيدة
+                        </span>
+                    </button>
+
+
+                    <button
+                        class="feeling-option"
+                        data-feeling="calm"
+                        type="button"
+                    >
+                        <span class="feeling-icon">
+                            ☕
+                        </span>
+
+                        <span>
+                            هادئة
+                        </span>
+                    </button>
+
+
+                    <button
+                        class="feeling-option"
+                        data-feeling="anxious"
+                        type="button"
+                    >
+                        <span class="feeling-icon">
+                            🌿
+                        </span>
+
+                        <span>
+                            متوترة
+                        </span>
+                    </button>
+
+
+                    <button
+                        class="feeling-option"
+                        data-feeling="scared"
+                        type="button"
+                    >
+                        <span class="feeling-icon">
+                            🌙
+                        </span>
+
+                        <span>
+                            خايفة
+                        </span>
+                    </button>
+
+
+                    <button
+                        class="feeling-option"
+                        data-feeling="sad"
+                        type="button"
+                    >
+                        <span class="feeling-icon">
+                            🌧️
+                        </span>
+
+                        <span>
+                            حزينة
+                        </span>
+                    </button>
+
+
+                    <button
+                        class="feeling-option"
+                        data-feeling="lonely"
+                        type="button"
+                    >
+                        <span class="feeling-icon">
+                            ♡
+                        </span>
+
+                        <span>
+                            وحيدة
+                        </span>
+                    </button>
+
+                </div>
+
+
+                <div
+                    id="feelingResult"
+                    class="feeling-result"
+                ></div>
+
+            </main>
+
+        </section>
+
+
+
+        <!-- =========================
+             صفحة الأصدقاء
+        ========================== -->
+
+        <section
+            id="friendsPage"
+            class="page"
+        >
+
+            <header class="page-header">
+
+                <h2>
+                    Friends Box ♡
+                </h2>
+
+                <p>
+                    أضيفي أصحابك باستخدام الكود
+                </p>
+
+            </header>
+
+
+            <main class="page-content">
+
+                <!-- كودي -->
+
+                <div class="friend-code-box">
+
+                    <span class="small-label">
+                        كودك
+                    </span>
+
+                    <div
+                        id="friendCode"
+                        class="friend-code"
+                    >
+                        FRIEND-......
+                    </div>
+
+                    <button
+                        id="copyFriendCode"
+                        class="secondary-button"
+                        type="button"
+                    >
+                        نسخ الكود
+                    </button>
+
+                </div>
+
+
+                <!-- إضافة صديق -->
+
+                <div class="add-friend-box">
+
+                    <span class="small-label">
+                        إضافة صديق
+                    </span>
+
+                    <input
+                        id="friendCodeInput"
+                        type="text"
+                        placeholder="FRIEND-XXXXXX"
+                        autocomplete="off"
+                    >
+
+                    <button
+                        id="addFriendButton"
+                        class="primary-button"
+                        type="button"
+                    >
+                        إضافة الصديق ♡
+                    </button>
+
+                </div>
+
+
+                <!-- قائمة الأصدقاء -->
+
+                <div class="friends-section">
+
+                    <h3>
+                        أصدقائي
+                    </h3>
+
+                    <div
+                        id="friendsList"
+                        class="friends-list"
+                    >
+
+                        <p class="empty-friends">
+                            ما عندكش أصدقاء مضافين لحد الآن ♡
+                        </p>
+
+                    </div>
+
+                </div>
+
+            </main>
+
+        </section>
+
+
+
+        <!-- =========================
+             صفحة التذكيرات
+        ========================== -->
+
+        <section
+            id="remindersPage"
+            class="page"
+        >
+
+            <header class="page-header">
+
+                <h2>
+                    تذكيراتي ♡
+                </h2>
+
+                <p>
+                    حاجات صغيرة ما نبيوش ننساوها
+                </p>
+
+            </header>
+
+
+            <main class="page-content">
+
+                <button
+                    id="addReminderButton"
+                    class="primary-button full-button"
+                    type="button"
+                >
+                    + إضافة تذكير
+                </button>
+
+
+                <div
+                    id="remindersContainer"
+                    class="reminders-container"
+                ></div>
+
+            </main>
+
+        </section>
+
+
+
+        <!-- =========================
+             الملف الشخصي
+        ========================== -->
+
+        <section
+            id="profilePage"
+            class="page"
+        >
+
+            <header class="page-header">
+
+                <h2>
+                    ملفي الشخصي ♡
+                </h2>
+
+            </header>
+
+
+            <main class="page-content">
+
+                <div class="profile-card">
+
+                    <div class="profile-avatar">
+                        ♡
+                    </div>
+
+                    <h2>
+                        مستخدم جديد
+                    </h2>
+
+                    <p>
+                        Friends Boxes Open
+                    </p>
+
+                </div>
+
+
+                <div class="profile-stats">
+
+                    <div class="stat-card">
+
+                        <strong id="postCount">
+                            0
+                        </strong>
+
+                        <span>
+                            منشورات
+                        </span>
+
+                    </div>
+
+
+                    <div class="stat-card">
+
+                        <strong id="likeCount">
+                            0
+                        </strong>
+
+                        <span>
+                            إعجابات
+                        </span>
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    id="profileFeeling"
+                    class="profile-feeling"
+                >
+                    لم تحدد إحساسك اليوم بعد ｡
+                </div>
+
+            </main>
+
+        </section>
+
+
+
+        <!-- =========================
+             شريط التنقل
+        ========================== -->
+
+        <nav class="bottom-nav">
 
             <button
-                id="addReminderButton"
-                class="primary-button"
+                class="nav-button active"
+                data-page="homePage"
                 type="button"
             >
-                ＋ إضافة تذكير
+                <span>⌂</span>
+                <span>الرئيسية</span>
             </button>
 
-        </section>
 
-    </main>
-
-
-    <!-- الشريط السفلي -->
-    <nav class="bottom-nav">
-
-        <button
-            class="nav-button active"
-            data-page="homePage"
-            type="button"
-        >
-            <span>⌂</span>
-            <small>الرئيسية</small>
-        </button>
-
-        <button
-            class="nav-button"
-            data-page="feelingsPage"
-            type="button"
-        >
-            <span>♡</span>
-            <small>مشاعري</small>
-        </button>
-
-        <button
-            class="nav-button"
-            data-page="friendsPage"
-            type="button"
-        >
-            <span>✦</span>
-            <small>الأصدقاء</small>
-        </button>
-
-        <button
-            class="nav-button"
-            data-page="remindersPage"
-            type="button"
-        >
-            <span>☼</span>
-            <small>التذكيرات</small>
-        </button>
-
-        <button
-            class="nav-button"
-            data-page="profilePage"
-            type="button"
-        >
-            <span>♧</span>
-            <small>ملفي</small>
-        </button>
-
-    </nav>
+            <button
+                class="nav-button"
+                data-page="feelingsPage"
+                type="button"
+            >
+                <span>♡</span>
+                <span>المشاعر</span>
+            </button>
 
 
-    <!-- نافذة إنشاء منشور -->
-    <div id="postModal" class="modal">
+            <button
+                class="nav-button"
+                data-page="friendsPage"
+                type="button"
+            >
+                <span>♧</span>
+                <span>الأصدقاء</span>
+            </button>
+
+
+            <button
+                class="nav-button"
+                data-page="remindersPage"
+                type="button"
+            >
+                <span>⌚</span>
+                <span>التذكيرات</span>
+            </button>
+
+
+            <button
+                class="nav-button"
+                data-page="profilePage"
+                type="button"
+            >
+                <span>☻</span>
+                <span>ملفي</span>
+            </button>
+
+        </nav>
+
+    </div>
+
+
+
+    <!-- =========================
+         نافذة إنشاء منشور
+    ========================== -->
+
+    <div
+        id="postModal"
+        class="modal"
+    >
 
         <div class="modal-content">
 
@@ -389,24 +555,25 @@
 
             <textarea
                 id="postText"
-                placeholder="اكتب شيئًا..."
-                maxlength="1000"
+                placeholder="اكتبي شيء..."
+                rows="5"
             ></textarea>
 
 
-            <!-- الصورة -->
-            <div class="image-upload-area">
+            <!-- رفع صورة -->
+
+            <div class="image-upload-box">
 
                 <label
                     for="postImage"
                     class="image-upload-button"
                 >
-                    📷 إضافة صورة
+                    إضافة صورة ♡
                 </label>
 
                 <input
-                    type="file"
                     id="postImage"
+                    type="file"
                     accept="image/*"
                     hidden
                 >
@@ -420,34 +587,36 @@
 
 
             <!-- الخصوصية -->
-            <div class="visibility-section">
 
-                <label for="postVisibility">
-                    من يستطيع رؤية المنشور؟
-                </label>
+            <label
+                for="postVisibility"
+                class="input-label"
+            >
+                من يستطيع رؤية المنشور؟
+            </label>
 
-                <select id="postVisibility">
+            <select
+                id="postVisibility"
+            >
 
-                    <option value="everyone">
-                        الجميع
-                    </option>
+                <option value="everyone">
+                    الجميع
+                </option>
 
-                    <option value="friends">
-                        الأصدقاء
-                    </option>
+                <option value="friends">
+                    الأصدقاء
+                </option>
 
-                    <option value="private">
-                        أنا فقط
-                    </option>
+                <option value="private">
+                    أنا فقط
+                </option>
 
-                </select>
-
-            </div>
+            </select>
 
 
             <button
                 id="publishPostButton"
-                class="primary-button"
+                class="primary-button full-button"
                 type="button"
             >
                 نشر ♡
@@ -458,10 +627,17 @@
     </div>
 
 
-    <!-- نافذة الرسائل -->
-    <div id="messageModal" class="modal">
 
-        <div class="modal-content small-modal">
+    <!-- =========================
+         نافذة الرسائل
+    ========================== -->
+
+    <div
+        id="messageModal"
+        class="modal"
+    >
+
+        <div class="modal-content message-modal-content">
 
             <button
                 id="closeMessageModal"
@@ -481,11 +657,19 @@
     </div>
 
 
-    <!-- JavaScript -->
+
+    <!-- =========================
+         JavaScript
+    ========================== -->
+
     <script src="storage.js"></script>
+
     <script src="posts.js"></script>
+
     <script src="feelings.js"></script>
+
     <script src="reminders.js"></script>
+
     <script src="app.js"></script>
 
 </body>
