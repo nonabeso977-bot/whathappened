@@ -1,0 +1,1213 @@
+/* ========================================
+   Friends Boxes Open ♡
+   Main Interface
+======================================== */
+
+:root {
+    --theme-bg: #eaf7ff;
+    --theme-card: #ffffff;
+    --theme-text: #30445a;
+    --theme-muted: #7890a5;
+    --theme-primary: #78c8ee;
+    --theme-secondary: #f5b9d0;
+    --theme-border: #d5eaf5;
+    --theme-nav: #ffffff;
+
+    --radius-large: 24px;
+    --radius-medium: 18px;
+    --radius-small: 14px;
+
+    --shadow-soft: 0 8px 25px rgba(70, 120, 150, 0.08);
+}
+
+
+/* ========================================
+   Reset
+======================================== */
+
+* {
+    box-sizing: border-box;
+}
+
+html {
+    scroll-behavior: smooth;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+
+    background: var(--theme-bg);
+    color: var(--theme-text);
+
+    font-family:
+        system-ui,
+        -apple-system,
+        BlinkMacSystemFont,
+        "Segoe UI",
+        sans-serif;
+
+    direction: rtl;
+}
+
+
+/* ========================================
+   التطبيق
+======================================== */
+
+#app {
+    width: 100%;
+    min-height: 100vh;
+
+    padding-bottom: 90px;
+}
+
+
+/* ========================================
+   الصفحات
+======================================== */
+
+.page {
+    display: none;
+
+    width: 100%;
+    max-width: 680px;
+
+    min-height: calc(100vh - 90px);
+
+    margin: 0 auto;
+
+    padding: 18px 16px 30px;
+}
+
+.page.active {
+    display: block;
+}
+
+
+/* ========================================
+   الهيدر الرئيسي
+======================================== */
+
+.top-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    gap: 15px;
+
+    padding: 12px 4px 20px;
+}
+
+.top-header h1 {
+    margin: 0;
+
+    font-size: 22px;
+    line-height: 1.3;
+}
+
+.top-header p {
+    margin: 5px 0 0;
+
+    color: var(--theme-muted);
+
+    font-size: 13px;
+}
+
+
+/* ========================================
+   الأزرار
+======================================== */
+
+button {
+    border: 0;
+    font: inherit;
+    cursor: pointer;
+}
+
+.primary-button,
+.secondary-button {
+    min-height: 44px;
+
+    padding: 10px 18px;
+
+    border-radius: var(--radius-small);
+
+    transition:
+        transform 0.15s ease,
+        opacity 0.15s ease;
+}
+
+.primary-button {
+    background: var(--theme-primary);
+    color: white;
+}
+
+.secondary-button {
+    background: var(--theme-secondary);
+    color: var(--theme-text);
+}
+
+.primary-button:hover,
+.secondary-button:hover,
+.icon-button:hover,
+.nav-item:hover,
+.nav-create:hover {
+    transform: translateY(-1px);
+}
+
+.primary-button:active,
+.secondary-button:active,
+.icon-button:active,
+.nav-item:active,
+.nav-create:active {
+    transform: scale(0.97);
+}
+
+.full-button {
+    width: 100%;
+}
+
+
+/* ========================================
+   زر +
+======================================== */
+
+.icon-button {
+    width: 48px;
+    height: 48px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--theme-primary);
+    color: white;
+
+    font-size: 27px;
+
+    box-shadow: var(--shadow-soft);
+}
+
+
+/* ========================================
+   تبويبات الرئيسية
+======================================== */
+
+.home-tabs {
+    display: flex;
+
+    gap: 8px;
+
+    margin-bottom: 16px;
+
+    padding-bottom: 8px;
+
+    border-bottom: 1px solid var(--theme-border);
+}
+
+.home-tab {
+    flex: 1;
+
+    padding: 10px;
+
+    border-radius: 12px;
+
+    background: transparent;
+    color: var(--theme-muted);
+}
+
+.home-tab.active {
+    background: var(--theme-card);
+    color: var(--theme-text);
+
+    box-shadow: var(--shadow-soft);
+}
+
+
+/* ========================================
+   المنشورات
+======================================== */
+
+.posts-container {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 14px;
+}
+
+.post-card {
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-large);
+
+    padding: 16px;
+
+    box-shadow: var(--shadow-soft);
+}
+
+.post-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    margin-bottom: 12px;
+}
+
+.post-avatar {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--theme-secondary);
+
+    font-size: 20px;
+}
+
+.post-author {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 2px;
+}
+
+.post-author strong {
+    font-size: 14px;
+}
+
+.post-author span {
+    color: var(--theme-muted);
+
+    font-size: 11px;
+}
+
+.post-text {
+    margin: 8px 0;
+
+    line-height: 1.8;
+
+    white-space: pre-wrap;
+
+    overflow-wrap: anywhere;
+}
+
+.post-image {
+    margin-top: 12px;
+
+    overflow: hidden;
+
+    border-radius: var(--radius-medium);
+}
+
+.post-image img {
+    display: block;
+
+    width: 100%;
+    max-height: 500px;
+
+    object-fit: cover;
+}
+
+.post-actions {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 14px;
+
+    padding-top: 12px;
+
+    border-top: 1px solid var(--theme-border);
+}
+
+.post-actions button {
+    padding: 8px 12px;
+
+    border-radius: 12px;
+
+    background: transparent;
+
+    color: var(--theme-muted);
+}
+
+.post-actions button:hover {
+    background: var(--theme-bg);
+    color: var(--theme-text);
+}
+
+
+/* ========================================
+   الحالة الفارغة
+======================================== */
+
+.empty-state {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    text-align: center;
+
+    padding: 55px 20px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.empty-state.small {
+    padding: 35px 20px;
+}
+
+.empty-icon {
+    width: 58px;
+    height: 58px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background: var(--theme-secondary);
+
+    font-size: 25px;
+}
+
+.empty-state h3 {
+    margin: 5px 0;
+
+    font-size: 17px;
+}
+
+.empty-state p {
+    margin: 5px 0 18px;
+
+    color: var(--theme-muted);
+
+    font-size: 13px;
+}
+
+
+/* ========================================
+   هيدر الصفحات
+======================================== */
+
+.page-header {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 22px;
+}
+
+.page-header h2 {
+    margin: 0;
+
+    font-size: 21px;
+}
+
+.page-header p {
+    margin: 4px 0 0;
+
+    color: var(--theme-muted);
+
+    font-size: 12px;
+}
+
+.back-button {
+    width: 42px;
+    height: 42px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--theme-card);
+
+    color: var(--theme-text);
+
+    box-shadow: var(--shadow-soft);
+}
+
+
+/* ========================================
+   المشاعر
+======================================== */
+
+.feeling-current-card {
+    display: flex;
+
+    align-items: center;
+
+    gap: 14px;
+
+    padding: 18px;
+
+    margin-bottom: 18px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.feeling-current-card > span {
+    width: 52px;
+    height: 52px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--theme-bg);
+
+    font-size: 25px;
+}
+
+.feeling-current-card > div {
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+
+    gap: 3px;
+}
+
+.feeling-current-card small {
+    color: var(--theme-muted);
+
+    font-size: 11px;
+}
+
+.feelings-grid {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 12px;
+}
+
+.feeling-option {
+    min-height: 95px;
+
+    display: flex;
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 7px;
+
+    background: var(--theme-card);
+
+    color: var(--theme-text);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-medium);
+
+    font-size: 25px;
+
+    box-shadow: var(--shadow-soft);
+}
+
+.feeling-option span {
+    font-size: 13px;
+}
+
+
+/* ========================================
+   Friends Box
+======================================== */
+
+.friend-box-card,
+.friends-section {
+    margin-bottom: 18px;
+
+    padding: 18px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.friend-box-card h3,
+.friends-section h3 {
+    margin-top: 0;
+}
+
+.friend-box-card p {
+    color: var(--theme-muted);
+
+    font-size: 13px;
+}
+
+.friend-code-display {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 7px;
+
+    margin: 16px 0;
+}
+
+.friend-code-display span {
+    color: var(--theme-muted);
+
+    font-size: 12px;
+}
+
+.friend-code-display strong {
+    padding: 13px;
+
+    text-align: center;
+
+    background: var(--theme-bg);
+
+    border-radius: 13px;
+
+    letter-spacing: 1px;
+}
+
+.friend-add {
+    display: flex;
+
+    gap: 8px;
+}
+
+.friend-add input {
+    min-width: 0;
+    flex: 1;
+}
+
+input,
+textarea,
+select {
+    width: 100%;
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-small);
+
+    background: var(--theme-bg);
+
+    color: var(--theme-text);
+
+    font: inherit;
+
+    outline: none;
+}
+
+input {
+    min-height: 44px;
+
+    padding: 10px 12px;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+    border-color: var(--theme-primary);
+}
+
+.friend-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 12px;
+
+    margin-top: 10px;
+
+    background: var(--theme-bg);
+
+    border-radius: var(--radius-medium);
+}
+
+.friend-item-info {
+    flex: 1;
+}
+
+.friend-item button {
+    padding: 8px 11px;
+
+    border-radius: 10px;
+
+    background: var(--theme-secondary);
+
+    color: var(--theme-text);
+}
+
+
+/* ========================================
+   التذكيرات
+======================================== */
+
+.reminders-list {
+    display: flex;
+
+    flex-direction: column;
+
+    gap: 10px;
+
+    margin-top: 15px;
+}
+
+.reminder-item {
+    display: flex;
+
+    align-items: center;
+
+    gap: 10px;
+
+    padding: 14px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-medium);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.reminder-item span {
+    flex: 1;
+}
+
+
+/* ========================================
+   الملف الشخصي
+======================================== */
+
+.profile-card {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    text-align: center;
+
+    padding: 25px 18px;
+
+    margin-bottom: 15px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.profile-avatar {
+    width: 86px;
+    height: 86px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    margin-bottom: 12px;
+
+    border-radius: 50%;
+
+    background: var(--theme-secondary);
+
+    font-size: 38px;
+}
+
+.profile-card h2 {
+    margin: 5px 0;
+
+    font-size: 21px;
+}
+
+.profile-card p {
+    margin: 4px 0 16px;
+
+    color: var(--theme-muted);
+}
+
+.profile-buttons {
+    display: flex;
+
+    flex-wrap: wrap;
+
+    justify-content: center;
+
+    gap: 8px;
+}
+
+.auth-card {
+    padding: 18px;
+
+    margin-bottom: 15px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.auth-card h3 {
+    margin-top: 0;
+}
+
+.auth-card p {
+    color: var(--theme-muted);
+
+    font-size: 13px;
+}
+
+.auth-card input {
+    margin-top: 9px;
+}
+
+.auth-buttons {
+    display: flex;
+
+    gap: 8px;
+
+    margin-top: 12px;
+}
+
+.auth-buttons button {
+    flex: 1;
+}
+
+.profile-stats {
+    display: grid;
+
+    grid-template-columns: repeat(3, 1fr);
+
+    gap: 10px;
+}
+
+.profile-stats > div {
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+
+    justify-content: center;
+
+    gap: 4px;
+
+    min-height: 85px;
+
+    padding: 10px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-medium);
+
+    box-shadow: var(--shadow-soft);
+
+    text-align: center;
+}
+
+.profile-stats strong {
+    font-size: 18px;
+}
+
+.profile-stats span {
+    color: var(--theme-muted);
+
+    font-size: 11px;
+}
+
+
+/* ========================================
+   الإعدادات
+======================================== */
+
+.settings-card {
+    padding: 18px;
+
+    margin-bottom: 14px;
+
+    background: var(--theme-card);
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: var(--radius-large);
+
+    box-shadow: var(--shadow-soft);
+}
+
+.settings-title {
+    display: flex;
+
+    align-items: center;
+
+    gap: 12px;
+
+    margin-bottom: 16px;
+}
+
+.settings-title > span {
+    width: 42px;
+    height: 42px;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    border-radius: 50%;
+
+    background: var(--theme-bg);
+
+    font-size: 20px;
+}
+
+.settings-title h3 {
+    margin: 0;
+}
+
+.settings-title p {
+    margin: 3px 0 0;
+
+    color: var(--theme-muted);
+
+    font-size: 12px;
+}
+
+.theme-list {
+    display: grid;
+
+    grid-template-columns: repeat(2, 1fr);
+
+    gap: 9px;
+}
+
+.theme-option {
+    padding: 12px;
+
+    border: 1px solid var(--theme-border);
+
+    border-radius: 13px;
+
+    background: var(--theme-bg);
+
+    color: var(--theme-text);
+
+    text-align: right;
+}
+
+.theme-option.selected {
+    border: 2px solid var(--theme-primary);
+
+    background: var(--theme-card);
+}
+
+
+/* ========================================
+   شريط التنقل السفلي
+======================================== */
+
+.bottom-nav {
+    position: fixed;
+
+    right: 0;
+    bottom: 0;
+    left: 0;
+
+    z-index: 100;
+
+    display: flex;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 4px;
+
+    height: 72px;
+
+    padding: 7px 10px;
+
+    background: var(--theme-nav);
+
+    border-top: 1px solid var(--theme-border);
+
+    box-shadow: 0 -5px 20px rgba(50, 80, 100, 0.06);
+}
+
+.nav-item {
+    width: 64px;
+    height: 56px;
+
+    display: flex;
+
+    flex-direction: column;
+
+    align-items: center;
+    justify-content: center;
+
+    gap: 2px;
+
+    border-radius: 14px;
+
+    background: transparent;
+
+    color: var(--theme-muted);
+}
+
+.nav-item span {
+    font-size: 19px;
+}
+
+.nav-item small {
+    font-size: 10px;
+}
+
+.nav-item.active {
+    background: var(--theme-bg);
+
+    color: var(--theme-text);
+}
+
+.nav-create {
+    width: 52px;
+    height: 52px;
+
+    flex-shrink: 0;
+
+    border-radius: 50%;
+
+    background: var(--theme-primary);
+
+    color: white;
+
+    font-size: 28px;
+
+    box-shadow: var(--shadow-soft);
+}
+
+
+/* ========================================
+   النوافذ
+======================================== */
+
+.modal {
+    position: fixed;
+
+    inset: 0;
+
+    z-index: 200;
+
+    display: flex;
+
+    align-items: flex-end;
+    justify-content: center;
+
+    padding: 15px;
+
+    background: rgba(30, 45, 60, 0.25);
+}
+
+.modal.hidden {
+    display: none;
+}
+
+.modal-box {
+    width: 100%;
+    max-width: 600px;
+
+    max-height: 90vh;
+
+    overflow-y: auto;
+
+    padding: 18px;
+
+    background: var(--theme-card);
+
+    border-radius: 25px 25px 15px 15px;
+
+    box-shadow: 0 15px 50px rgba(20, 50, 70, 0.18);
+}
+
+.modal-header {
+    display: flex;
+
+    align-items: center;
+    justify-content: space-between;
+
+    margin-bottom: 15px;
+}
+
+.modal-header h2 {
+    margin: 0;
+
+    font-size: 19px;
+}
+
+.close-button {
+    width: 38px;
+    height: 38px;
+
+    border-radius: 50%;
+
+    background: var(--theme-bg);
+
+    color: var(--theme-text);
+
+    font-size: 23px;
+}
+
+textarea {
+    min-height: 150px;
+
+    resize: vertical;
+
+    padding: 13px;
+
+    line-height: 1.7;
+}
+
+.image-upload {
+    margin: 12px 0;
+}
+
+.image-upload label {
+    display: inline-flex;
+
+    align-items: center;
+    justify-content: center;
+
+    cursor: pointer;
+}
+
+#imagePreview {
+    margin-bottom: 12px;
+}
+
+#imagePreview img {
+    display: block;
+
+    width: 100%;
+
+    max-height: 300px;
+
+    object-fit: cover;
+
+    border-radius: var(--radius-medium);
+}
+
+.modal-box select {
+    min-height: 44px;
+
+    margin: 7px 0 12px;
+
+    padding: 8px;
+}
+
+
+/* ========================================
+   موبايل
+======================================== */
+
+@media (max-width: 480px) {
+
+    .page {
+        padding-right: 12px;
+        padding-left: 12px;
+    }
+
+    .top-header h1 {
+        font-size: 19px;
+    }
+
+    .friend-add {
+        flex-direction: column;
+    }
+
+    .auth-buttons {
+        flex-direction: column;
+    }
+
+    .profile-buttons {
+        width: 100%;
+
+        flex-direction: column;
+    }
+
+    .profile-buttons button {
+        width: 100%;
+    }
+
+    .bottom-nav {
+        gap: 1px;
+
+        padding-right: 5px;
+        padding-left: 5px;
+    }
+
+    .nav-item {
+        width: 58px;
+    }
+
+    .nav-create {
+        width: 48px;
+        height: 48px;
+    }
+
+}
+
+
+/* ========================================
+   تقليل الحركة
+======================================== */
+
+@media (prefers-reduced-motion: reduce) {
+
+    * {
+        scroll-behavior: auto !important;
+
+        transition: none !important;
+    }
+
+}
