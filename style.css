@@ -1435,3 +1435,114 @@ select {
 
     border-radius: 18px;
 }
+/* ========================================
+   Friends Boxes Open ♡
+   Theme Variables
+======================================== */
+
+:root {
+
+    --theme-bg: #eaf7ff;
+    --theme-card: #ffffff;
+    --theme-text: #30445a;
+    --theme-muted: #7890a5;
+    --theme-primary: #78c8ee;
+    --theme-secondary: #f5b9d0;
+    --theme-border: #d5eaf5;
+    --theme-nav: #ffffff;
+
+}
+
+
+/* الخلفية */
+
+body {
+    background: var(--theme-bg);
+    color: var(--theme-text);
+}
+
+
+/* البطاقات */
+
+.card,
+.post-card,
+.feeling-card,
+.friend-code-box,
+.add-friend-box,
+.profile-card,
+.auth-box,
+.stat-card,
+.profile-feeling,
+.reminder-card,
+.modal-content {
+    background: var(--theme-card);
+    color: var(--theme-text);
+    border-color: var(--theme-border);
+}
+
+
+/* النصوص الثانوية */
+
+.small-label,
+.post-author span,
+.profile-card p,
+.page-header p,
+.auth-box p {
+    color: var(--theme-muted);
+}
+
+
+/* الأزرار الأساسية */
+
+.primary-button {
+    background: var(--theme-primary);
+    color: var(--theme-text);
+}
+
+
+/* الأزرار الثانوية */
+
+.secondary-button {
+    background: var(--theme-secondary);
+    color: var(--theme-text);
+}
+
+
+/* شريط التنقل */
+
+.bottom-nav {
+    background: var(--theme-nav);
+    border-color: var(--theme-border);
+}
+
+
+/* حقول الإدخال */
+
+input,
+textarea,
+select {
+    background: var(--theme-card);
+    color: var(--theme-text);
+    border-color: var(--theme-border);
+}
+
+
+/* النصوص داخل المنشورات */
+
+.post-text {
+    color: var(--theme-text);
+}
+
+
+/* أزرار المنشورات */
+
+.post-actions button {
+    color: var(--theme-text);
+}
+
+
+/* كود الصديق */
+
+.friend-code {
+    color: var(--theme-primary);
+}
