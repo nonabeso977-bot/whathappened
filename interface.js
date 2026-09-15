@@ -437,17 +437,211 @@ const App = {
     },
 
 
-    /* ================================
-       تهيئة الواجهة
-    ================================= */
+        /* ========================================
+   النشر
+======================================== */
 
-    init() {
+function publishPost() {
 
-        /* شريط التنقل */
+    if (typeof Posts === "undefined") {
+        console.error("Posts.js غير محمل");
+        return;
+    }
+
+
+    const textInput =
+        document.getElementById("postText");
+
+    const visibilityInput =
+        document.getElementById("postVisibility");
+
+    const imageInput =
+        document.getElementById("postImageInput");
+
+
+    const text =
+        textInput
+            ? textInput.value.trim()
+            : "";
+
+
+    const visibility =
+        visibilityInput
+            ? visibilityInput.value
+            : "everyone";
+
+
+    let image = null;
+
+
+    /*
+       الصور نحتاج نعالجها قبل إنشاء المنشور
+    */
+
+    const file =
+        imageInput &&
+        imageInput.files &&
+        imageInput.files[0];
+
+
+    if (file) {
+
+        const reader =
+            new FileReader();
+
+
+        reader.onload = function () {
+
+            image = reader.result;
+
+
+            Posts.create(
+                text,
+                visibility,
+                image
+            );
+
+
+            closePostModal();
+
+
+            if (typeof App !== "undefined") {
+
+                App.showPage("homePage");
+
+            }
+
+            refreshPosts();
+
+        };
+
+
+        reader.readAsDataURL(file);
+
+        return;
+    }
+
+
+    Posts.create(
+        text,
+        visibility,
+        null
+    );
+
+
+    closePostModal();
+
+
+    if (typeof App !== "undefined") {
+
+        App.showPage("homePage");
+
+    }
+
+
+    refreshPosts();
+
+}
+
+
+/* ========================================
+   تحديث المنشورات
+======================================== */
+
+function refreshPosts() {
+
+    const container =
+        document.getElementById(
+            "postsContainer"
+        );
+
+
+    if (
+        container &&
+        typeof Posts !== "undefined"
+    ) {
+
+        Posts.render(container);
+
+    }
+
+}
+
+
+/* ========================================
+   الثيمات
+======================================== */
+
+function renderThemesDirectly() {
+
+    const container =
+        document.getElementById(
+            "themeList"
+        );
+
+
+    if (!container) {
+        return;
+    }
+
+
+    if (typeof Themes === "undefined") {
+
+        container.innerHTML =
+            "<p>نظام الثيمات غير محمل</p>";
+
+        return;
+    }
+
+
+    const current =
+        Themes.getCurrent();
+
+
+    const themes =
+        Themes.getThemeList();
+
+
+    container.innerHTML =
+        themes.map(theme => {
+
+            const selected =
+                theme.id === current
+                    ? "selected"
+                    : "";
+
+
+            return `
+                <button
+                    type="button"
+                    class="theme-option ${selected}"
+                    data-theme="${theme.id}"
+                >
+                    ${theme.name}
+                </button>
+            `;
+
+        }).join("");
+}
+
+
+/* ========================================
+   تشغيل الواجهة
+======================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    () => {
+
+
+        /* ============================
+           التنقل
+        ============================ */
 
         document.addEventListener(
             "click",
             event => {
+
 
                 const nav =
                     event.target.closest(
@@ -457,15 +651,16 @@ const App = {
 
                 if (nav) {
 
-                    this.showPage(
+                    App.showPage(
                         nav.dataset.page
                     );
 
                     return;
+
                 }
 
 
-                /* زر إنشاء المنشور */
+                /* زر إنشاء منشور */
 
                 const createButton =
                     event.target.closest(
@@ -475,77 +670,76 @@ const App = {
 
                 if (createButton) {
 
-                    this.openPostModal();
+                    App.openPostModal();
 
                     return;
+
                 }
 
 
-                /* إغلاق المنشور */
+                /* إغلاق نافذة المنشور */
 
-                const closePost =
+                if (
                     event.target.closest(
                         "#closePostModal"
-                    );
+                    )
+                ) {
 
-
-                if (closePost) {
-
-                    this.closePostModal();
+                    App.closePostModal();
 
                     return;
+
                 }
 
 
-                /* تعديل البروفايل */
+                /* نشر */
 
-                const editProfile =
+                if (
                     event.target.closest(
-                        "#editProfileButton"
-                    );
+                        "#publishPostButton"
+                    )
+                ) {
 
-
-                if (editProfile) {
-
-                    this.editProfile();
+                    publishPost();
 
                     return;
+
                 }
 
 
                 /* الإعدادات */
 
-                const settings =
+                if (
                     event.target.closest(
                         "#settingsButton"
-                    );
+                    )
+                ) {
 
-
-                if (settings) {
-
-                    this.showPage(
+                    App.showPage(
                         "settingsPage"
                     );
 
+                    renderThemesDirectly();
+
                     return;
+
                 }
 
 
                 /* الرجوع للملف */
 
-                const backProfile =
+                if (
                     event.target.closest(
                         "#backToProfileButton"
-                    );
+                    )
+                ) {
 
-
-                if (backProfile) {
-
-                    this.showPage(
+                    App.showPage(
                         "profilePage"
                     );
 
                     return;
+
                 }
 
 
@@ -559,51 +753,75 @@ const App = {
 
                 if (back) {
 
-                    this.showPage(
+                    App.showPage(
                         back.dataset.back
                     );
 
                     return;
+
                 }
 
 
-                /* إغلاق الرسالة */
+                /* تعديل البروفايل */
 
-                const closeMessage =
+                if (
                     event.target.closest(
-                        "#closeMessageModal"
+                        "#editProfileButton"
+                    )
+                ) {
+
+                    App.editProfile();
+
+                    return;
+
+                }
+
+
+                /* ========================
+                   اختيار الثيم
+                ======================== */
+
+                const themeButton =
+                    event.target.closest(
+                        "[data-theme]"
                     );
 
 
-                if (closeMessage) {
+                if (
+                    themeButton &&
+                    typeof Themes !== "undefined"
+                ) {
 
-                    this.closeMessage();
+                    Themes.apply(
+                        themeButton.dataset.theme
+                    );
+
+
+                    renderThemesDirectly();
+
+                    return;
 
                 }
 
-            }
-        );
+
+                /* ========================
+                   تغيير الشعور
+                ======================== */
+
+                const feelingButton =
+                    event.target.closest(
+                        ".feeling-option"
+                    );
 
 
-        /* زر المشاعر */
-
-        const feelingButtons =
-            document.querySelectorAll(
-                ".feeling-option"
-            );
-
-
-        feelingButtons.forEach(button => {
-
-            button.addEventListener(
-                "click",
-                () => {
+                if (feelingButton) {
 
                     const feeling =
-                        button.dataset.feeling;
+                        feelingButton.dataset.feeling;
 
                     const icon =
-                        button.dataset.icon || "♡";
+                        feelingButton.dataset.icon ||
+                        "♡";
 
 
                     localStorage.setItem(
@@ -615,80 +833,148 @@ const App = {
                     );
 
 
-                    this.refreshFeeling();
+                    App.refreshFeeling();
+
+                    return;
 
                 }
-            );
-
-        });
 
 
-        /* زر تغيير الشعور */
+                /* تغيير الشعور */
 
-        const changeFeeling =
-            document.getElementById(
-                "changeFeelingButton"
-            );
+                if (
+                    event.target.closest(
+                        "#changeFeelingButton"
+                    )
+                ) {
 
-
-        if (changeFeeling) {
-
-            changeFeeling.addEventListener(
-                "click",
-                () => {
-
-                    this.showPage(
+                    App.showPage(
                         "feelingsPage"
                     );
 
+                    return;
+
                 }
-            );
-
-        }
 
 
-        /* إدارة الأصدقاء */
+                /* إدارة الأصدقاء */
 
-        const settingsFriends =
-            document.getElementById(
-                "settingsFriendsButton"
-            );
+                if (
+                    event.target.closest(
+                        "#settingsFriendsButton"
+                    )
+                ) {
 
-
-        if (settingsFriends) {
-
-            settingsFriends.addEventListener(
-                "click",
-                () => {
-
-                    this.showPage(
+                    App.showPage(
                         "friendsPage"
                     );
 
+                    return;
+
+                }
+
+
+                /* إغلاق الرسائل */
+
+                if (
+                    event.target.closest(
+                        "#closeMessageModal"
+                    )
+                ) {
+
+                    App.closeMessage();
+
+                    return;
+
+                }
+
+            }
+        );
+
+
+        /* ============================
+           معاينة الصورة
+        ============================ */
+
+        const imageInput =
+            document.getElementById(
+                "postImageInput"
+            );
+
+
+        if (imageInput) {
+
+            imageInput.addEventListener(
+                "change",
+                () => {
+
+                    const preview =
+                        document.getElementById(
+                            "imagePreview"
+                        );
+
+
+                    const file =
+                        imageInput.files &&
+                        imageInput.files[0];
+
+
+                    if (!preview) {
+                        return;
+                    }
+
+
+                    if (!file) {
+
+                        preview.innerHTML = "";
+
+                        return;
+
+                    }
+
+
+                    const reader =
+                        new FileReader();
+
+
+                    reader.onload =
+                        event => {
+
+                            preview.innerHTML = `
+                                <img
+                                    src="${event.target.result}"
+                                    alt="معاينة الصورة"
+                                >
+                            `;
+
+                        };
+
+
+                    reader.readAsDataURL(file);
+
                 }
             );
 
         }
 
 
-        /* تحميل الصفحة الأولى */
+        /* ============================
+           تحميل الثيمات
+        ============================ */
 
-        this.showPage("homePage");
-
-    }
-
-};
+        renderThemesDirectly();
 
 
-/* ========================================
-   تشغيل
-======================================== */
+        /* ============================
+           الصفحة الأولى
+        ============================ */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
+        App.showPage(
+            "homePage"
+        );
 
-        App.init();
+
+        refreshPosts();
 
     }
 );
