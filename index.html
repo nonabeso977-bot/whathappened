@@ -21,10 +21,6 @@
 
     <div id="app">
 
-        <!-- =========================
-             الصفحة الرئيسية
-        ========================== -->
-
         <section
             id="homePage"
             class="page active"
@@ -85,8 +81,6 @@
                 </div>
 
 
-                <!-- المنشورات -->
-
                 <div class="posts-scroll">
 
                     <div
@@ -100,10 +94,6 @@
 
         </section>
 
-
-        <!-- =========================
-             صفحة المشاعر
-        ========================== -->
 
         <section
             id="feelingsPage"
@@ -232,10 +222,6 @@
         </section>
 
 
-        <!-- =========================
-             صفحة الأصدقاء
-        ========================== -->
-
         <section
             id="friendsPage"
             class="page"
@@ -328,10 +314,6 @@
         </section>
 
 
-        <!-- =========================
-             صفحة التذكيرات
-        ========================== -->
-
         <section
             id="remindersPage"
             class="page"
@@ -371,35 +353,29 @@
         </section>
 
 
-        <!-- =========================
-             الملف الشخصي
-        ========================== -->
-
         <section
             id="profilePage"
             class="page"
+        >
 
-      <header>
+            <header class="page-header">
 
+                <h2>
+                    ملفي الشخصي ♡
+                </h2>
 
-<header class="page-header">
+                <button
+                    id="settingsButton"
+                    class="settings-button"
+                    type="button"
+                >
+                    ...
+                </button>
 
-    <h2>
-        ملفي الشخصي ♡
-    </h2>
-
-    <button
-        id="settingsButton"
-        class="settings-button"
-        type="button"
-    >
-        ...
-    </button>
-
-</header>
+            </header>
 
 
-<main class="page-content">
+            <main class="page-content">
 
                 <div class="profile-card">
 
@@ -417,8 +393,6 @@
 
                 </div>
 
-
-                <!-- تسجيل الدخول -->
 
                 <div
                     id="authBox"
@@ -518,10 +492,6 @@
         </section>
 
 
-        <!-- =========================
-             الشريط السفلي
-        ========================== -->
-
         <nav class="bottom-nav">
 
             <button
@@ -577,10 +547,6 @@
 
     </div>
 
-
-    <!-- =========================
-         نافذة المنشور
-    ========================== -->
 
     <div
         id="postModal"
@@ -678,10 +644,6 @@
     </div>
 
 
-    <!-- =========================
-         نافذة الرسائل
-    ========================== -->
-
     <div
         id="messageModal"
         class="modal"
@@ -708,10 +670,6 @@
     </div>
 
 
-    <!-- =========================
-         ملفات JavaScript
-    ========================== -->
-
     <script src="storage.js"></script>
 
     <script src="posts.js"></script>
@@ -726,9 +684,9 @@
 
     <script src="online.js"></script>
 
-<script src="theme.js"></script>
+    <script src="theme.js"></script>
 
-<script src="auth.js"></script>
+    <script src="auth.js"></script>
 
 </body>
 
