@@ -9,6 +9,7 @@ const SUPABASE_URL =
 const SUPABASE_PUBLISHABLE_KEY =
     "sb_publishable_mA5G1U9uyH3VALLy9Kzqjw_85TyIclO";
 
+
 const supabaseClient =
     supabase.createClient(
         SUPABASE_URL,
@@ -70,6 +71,32 @@ const Online = {
     isOnline() {
 
         return navigator.onLine;
+    },
+
+
+    async checkAuth() {
+
+        const session =
+            await this.getSession();
+
+
+        if (session && session.user) {
+
+            console.log(
+                "♡ Logged in:",
+                session.user.email
+            );
+
+            return session.user;
+
+        }
+
+
+        console.log(
+            "♡ No active session"
+        );
+
+        return null;
     }
 
 };
