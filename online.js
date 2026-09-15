@@ -105,3 +105,17 @@ const Online = {
 console.log(
     "Friends Boxes Open ♡ - Supabase connected"
 );
+document.addEventListener(
+    "DOMContentLoaded",
+    async () => {
+
+        const user =
+            await Online.checkAuth();
+
+        console.log(
+            "Current user:",
+            user
+        );
+
+    }
+);
