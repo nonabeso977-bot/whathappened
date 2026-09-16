@@ -80,7 +80,10 @@ const Online = {
             await this.getSession();
 
 
-        if (session && session.user) {
+        if (
+            session &&
+            session.user
+        ) {
 
             console.log(
                 "♡ Logged in:",
@@ -97,6 +100,47 @@ const Online = {
         );
 
         return null;
+    },
+
+
+    listenAuth() {
+
+        this.client.auth.onAuthStateChange(
+            async (event, session) => {
+
+                console.log(
+                    "♡ Auth event:",
+                    event
+                );
+
+
+                if (
+                    session &&
+                    session.user
+                ) {
+
+                    console.log(
+                        "♡ User authenticated:",
+                        session.user.email
+                    );
+
+                    window.dispatchEvent(
+                        new CustomEvent(
+                            "supabase-auth-ready",
+                            {
+                                detail: {
+                                    user:
+                                        session.user
+                                }
+                            }
+                        )
+                    );
+
+                }
+
+            }
+        );
+
     }
 
 };
@@ -105,9 +149,13 @@ const Online = {
 console.log(
     "Friends Boxes Open ♡ - Supabase connected"
 );
+
+
 document.addEventListener(
     "DOMContentLoaded",
     async () => {
+
+        Online.listenAuth();
 
         const user =
             await Online.checkAuth();
