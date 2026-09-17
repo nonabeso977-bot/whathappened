@@ -10,32 +10,32 @@ const Feelings = {
     feelings: {
 
         happy: {
-            name: "سعيد",
+            name: "سعيدة",
             icon: "☀️"
         },
 
-        sad: {
-            name: "حزين",
-            icon: "🌧️"
+        calm: {
+            name: "هادئة",
+            icon: "☕"
         },
 
         anxious: {
-            name: "موتر",
+            name: "متوترة",
             icon: "🌿"
         },
 
         scared: {
-            name: "خايف",
+            name: "خايفة",
             icon: "🌙"
         },
 
-        calm: {
-            name: "هادئ",
-            icon: "☕"
+        sad: {
+            name: "حزينة",
+            icon: "🌧️"
         },
 
         lonely: {
-            name: "وحيد",
+            name: "وحيدة",
             icon: "♡"
         }
 
@@ -48,6 +48,7 @@ const Feelings = {
             this.storageKey,
             null
         );
+
     },
 
 
@@ -56,7 +57,6 @@ const Feelings = {
         if (!this.feelings[feelingId]) {
             return null;
         }
-
 
         const feeling = {
 
@@ -73,14 +73,13 @@ const Feelings = {
 
         };
 
-
         Storage.save(
             this.storageKey,
             feeling
         );
 
-
         return feeling;
+
     },
 
 
@@ -98,13 +97,9 @@ const Feelings = {
         const feeling =
             this.get();
 
-
         if (!feeling) {
-
             return "كيف تشعر اليوم؟ ♡";
-
         }
-
 
         return (
             feeling.icon +
@@ -120,19 +115,12 @@ const Feelings = {
         const feeling =
             this.get();
 
-
         if (!feeling) {
-
-            return "لم تحدد إحساسك اليوم بعد ｡";
-
+            return "🌿";
         }
 
-
         return (
-            "إحساسي اليوم: " +
-            feeling.icon +
-            " " +
-            feeling.name
+            feeling.icon
         );
 
     },
@@ -140,19 +128,40 @@ const Feelings = {
 
     renderHome() {
 
-        const element =
+        const icon =
             document.getElementById(
-                "currentFeeling"
+                "currentFeelingIcon"
             );
 
+        const text =
+            document.getElementById(
+                "currentFeelingText"
+            );
 
-        if (!element) {
+        const feeling =
+            this.get();
+
+        if (!icon || !text) {
             return;
         }
 
+        if (!feeling) {
 
-        element.textContent =
-            this.getDisplayText();
+            icon.textContent =
+                "🌿";
+
+            text.textContent =
+                "موتر";
+
+            return;
+
+        }
+
+        icon.textContent =
+            feeling.icon;
+
+        text.textContent =
+            feeling.name;
 
     },
 
@@ -164,14 +173,24 @@ const Feelings = {
                 "profileFeeling"
             );
 
-
         if (!element) {
             return;
         }
 
+        const feeling =
+            this.get();
+
+        if (!feeling) {
+
+            element.textContent =
+                "🌿";
+
+            return;
+
+        }
 
         element.textContent =
-            this.getProfileText();
+            feeling.icon;
 
     },
 
@@ -180,7 +199,6 @@ const Feelings = {
 
         const current =
             this.get();
-
 
         document
             .querySelectorAll(
@@ -191,7 +209,6 @@ const Feelings = {
                 button.classList.remove(
                     "selected"
                 );
-
 
                 if (
                     current &&
@@ -210,54 +227,20 @@ const Feelings = {
     },
 
 
-    showResult(feeling) {
-
-        const result =
-            document.getElementById(
-                "feelingResult"
-            );
-
-
-        if (!result || !feeling) {
-            return;
-        }
-
-
-        result.innerHTML = `
-
-            <div class="feeling-result-card">
-
-                ${feeling.icon}
-
-                <span>
-                    تم حفظ إحساسك اليوم ♡
-                </span>
-
-            </div>
-
-        `;
-
-    },
-
-
     choose(feelingId) {
 
         const feeling =
             this.set(feelingId);
 
-
         if (!feeling) {
             return;
         }
-
 
         this.renderHome();
 
         this.renderProfile();
 
         this.renderSelection();
-
-        this.showResult(feeling);
 
     }
 
@@ -280,8 +263,8 @@ document.addEventListener(
 
 
         const container =
-            document.getElementById(
-                "feelingsContainer"
+            document.querySelector(
+                ".feelings-grid"
             );
 
 
@@ -298,7 +281,6 @@ document.addEventListener(
                     event.target.closest(
                         ".feeling-option"
                     );
-
 
                 if (!button) {
                     return;
