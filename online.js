@@ -106,7 +106,7 @@ const Online = {
     listenAuth() {
 
         this.client.auth.onAuthStateChange(
-            async (event, session) => {
+            (event, session) => {
 
                 console.log(
                     "♡ Auth event:",
@@ -114,29 +114,21 @@ const Online = {
                 );
 
 
-                if (
-                    session &&
-                    session.user
-                ) {
-
-                    console.log(
-                        "♡ User authenticated:",
-                        session.user.email
-                    );
-
-                    window.dispatchEvent(
-                        new CustomEvent(
-                            "supabase-auth-ready",
-                            {
-                                detail: {
-                                    user:
-                                        session.user
-                                }
+                window.dispatchEvent(
+                    new CustomEvent(
+                        "supabase-auth-change",
+                        {
+                            detail: {
+                                event: event,
+                                session: session,
+                                user:
+                                    session
+                                        ? session.user
+                                        : null
                             }
-                        )
-                    );
-
-                }
+                        }
+                    )
+                );
 
             }
         );
@@ -145,6 +137,10 @@ const Online = {
 
 };
 
+
+/* ========================================
+   تشغيل الاتصال
+======================================== */
 
 console.log(
     "Friends Boxes Open ♡ - Supabase connected"
@@ -157,12 +153,31 @@ document.addEventListener(
 
         Online.listenAuth();
 
-        const user =
-            await Online.checkAuth();
+
+        const session =
+            await Online.getSession();
+
+
+        window.dispatchEvent(
+            new CustomEvent(
+                "supabase-auth-change",
+                {
+                    detail: {
+                        event: "INITIAL_SESSION",
+                        session: session,
+                        user:
+                            session
+                                ? session.user
+                                : null
+                    }
+                }
+            )
+        );
+
 
         console.log(
-            "Current user:",
-            user
+            "Current session:",
+            session
         );
 
     }
