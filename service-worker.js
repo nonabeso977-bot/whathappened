@@ -17,8 +17,9 @@ const FILES_TO_CACHE = [
     "./sitting.js",
     "./auth.js",
     "./manifest.json",
-    "./icon-192.png",
-    "./icon-512.png"
+  "./بدون اسم428_20260917145929.png",
+"./بدون اسم427_20260917141103.png"
+
 ];
 
 
