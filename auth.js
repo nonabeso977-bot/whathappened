@@ -333,21 +333,24 @@ document.addEventListener(
            مراقبة حالة تسجيل الدخول
         ================================= */
 
-        if (
-            typeof Online !== "undefined" &&
-            Online.client
-        ) {
+        /* ========================================
+   مراقبة حالة الحساب
+======================================== */
 
-            Online.client.auth.onAuthStateChange(
-                (
-                    event,
-                    session
-                ) => {
 
-                    console.log(
-                        "Auth state:",
-                        event
-                    );
+window.addEventListener(
+    "supabase-auth-change",
+    (event) => {
+
+        const session =
+            event.detail.session;
+
+        Auth.updateUI(
+            session
+        );
+
+    }
+);
 
 
                     Auth.updateUI(
