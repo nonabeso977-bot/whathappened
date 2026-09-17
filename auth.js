@@ -154,6 +154,114 @@ const Auth = {
 
         }
 
+    },
+
+
+    async signOut() {
+
+        const message =
+            document.getElementById("authMessage");
+
+
+        const {
+            error
+        } = await Online.client.auth.signOut();
+
+
+        if (error) {
+
+            console.error(
+                "Sign out error:",
+                error
+            );
+
+            if (message) {
+
+                message.textContent =
+                    error.message;
+
+            }
+
+            return;
+        }
+
+    },
+
+
+    updateUI(session) {
+
+        const loggedOutBox =
+            document.getElementById("loggedOutBox");
+
+        const loggedInBox =
+            document.getElementById("loggedInBox");
+
+        const loggedInEmail =
+            document.getElementById("loggedInEmail");
+
+        const authMessage =
+            document.getElementById("authMessage");
+
+
+        if (session && session.user) {
+
+            if (loggedOutBox) {
+
+                loggedOutBox.style.display =
+                    "none";
+
+            }
+
+
+            if (loggedInBox) {
+
+                loggedInBox.style.display =
+                    "block";
+
+            }
+
+
+            if (loggedInEmail) {
+
+                loggedInEmail.textContent =
+                    session.user.email || "الحساب متصل ♡";
+
+            }
+
+        } else {
+
+            if (loggedOutBox) {
+
+                loggedOutBox.style.display =
+                    "block";
+
+            }
+
+
+            if (loggedInBox) {
+
+                loggedInBox.style.display =
+                    "none";
+
+            }
+
+
+            if (loggedInEmail) {
+
+                loggedInEmail.textContent =
+                    "تم تسجيل الدخول";
+
+            }
+
+        }
+
+
+        if (authMessage && !session) {
+
+            authMessage.textContent = "";
+
+        }
+
     }
 
 };
@@ -179,6 +287,12 @@ document.addEventListener(
             );
 
 
+        const logoutButton =
+            document.getElementById(
+                "logoutButton"
+            );
+
+
         if (signUpButton) {
 
             signUpButton.addEventListener(
@@ -199,6 +313,64 @@ document.addEventListener(
                     Auth.signIn();
                 }
             );
+
+        }
+
+
+        if (logoutButton) {
+
+            logoutButton.addEventListener(
+                "click",
+                () => {
+                    Auth.signOut();
+                }
+            );
+
+        }
+
+
+        /* ================================
+           مراقبة حالة تسجيل الدخول
+        ================================= */
+
+        if (
+            typeof Online !== "undefined" &&
+            Online.client
+        ) {
+
+            Online.client.auth.onAuthStateChange(
+                (
+                    event,
+                    session
+                ) => {
+
+                    console.log(
+                        "Auth state:",
+                        event
+                    );
+
+
+                    Auth.updateUI(
+                        session
+                    );
+
+                }
+            );
+
+
+            Online.client.auth
+                .getSession()
+                .then(
+                    ({
+                        data
+                    }) => {
+
+                        Auth.updateUI(
+                            data.session
+                        );
+
+                    }
+                );
 
         }
 
