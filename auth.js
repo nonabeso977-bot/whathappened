@@ -224,7 +224,8 @@ const Auth = {
             if (loggedInEmail) {
 
                 loggedInEmail.textContent =
-                    session.user.email || "الحساب متصل ♡";
+                    session.user.email ||
+                    "الحساب متصل ♡";
 
             }
 
@@ -280,12 +281,10 @@ document.addEventListener(
                 "signUpButton"
             );
 
-
         const signInButton =
             document.getElementById(
                 "signInButton"
             );
-
 
         const logoutButton =
             document.getElementById(
@@ -329,53 +328,23 @@ document.addEventListener(
         }
 
 
-        /* ================================
-           مراقبة حالة تسجيل الدخول
-        ================================= */
-
         /* ========================================
-   مراقبة حالة الحساب
-======================================== */
+           مراقبة حالة الحساب
+        ======================================== */
 
+        window.addEventListener(
+            "supabase-auth-change",
+            (event) => {
 
-window.addEventListener(
-    "supabase-auth-change",
-    (event) => {
+                const session =
+                    event.detail.session;
 
-        const session =
-            event.detail.session;
-
-        Auth.updateUI(
-            session
-        );
-
-    }
-);
-
-
-                    Auth.updateUI(
-                        session
-                    );
-
-                }
-            );
-
-
-            Online.client.auth
-                .getSession()
-                .then(
-                    ({
-                        data
-                    }) => {
-
-                        Auth.updateUI(
-                            data.session
-                        );
-
-                    }
+                Auth.updateUI(
+                    session
                 );
 
-        }
+            }
+        );
 
     }
 );
