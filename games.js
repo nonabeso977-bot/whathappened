@@ -1,4 +1,3 @@
-
 const Games = {
     key: "fbo_games_v1",
     currentId: null,
@@ -125,7 +124,7 @@ const Games = {
                         <article class="game-project-card">
                             <div>
                                 <strong>${this.escape(project.name)}</strong>
-                                <small>${project.commits.length} إصدار</small>
+                                <small>${(project.commits || []).length} إصدار</small>
                             </div>
                             <button class="secondary-button"
                                 data-game-action="open"
@@ -234,34 +233,34 @@ const Games = {
         }[tab];
 
         document.querySelectorAll(".game-file-tab").forEach(button => {
-            button.classList.toggle("active", button.dataset.gameTab === tab);
+            button.classList.toggle(
+                "active",
+                button.dataset.gameTab === tab
+            );
         });
     },
 
     collectEditor() {
-    const project = this.getCurrent();
-    const editor = document.getElementById("gameCodeEditor");
-    const nameInput = document.getElementById("gameNameInput");
+        const project = this.getCurrent();
+        const editor = document.getElementById("gameCodeEditor");
+        const nameInput = document.getElementById("gameNameInput");
 
-    if (!project || !editor) return null;
+        if (!project || !editor) return null;
 
-    project.files[this.currentTab] = editor.value;
+        project.files[this.currentTab] = editor.value;
 
-    if (nameInput && nameInput.value.trim()) {
-        project.name = nameInput.value.trim();
-    }
+        if (nameInput && nameInput.value.trim()) {
+            project.name = nameInput.value.trim();
+        }
 
-    const projects = this.getAll();
-    const index = projects.findIndex(item => item.id === project.id);
+        const projects = this.getAll();
+        const index = projects.findIndex(item => item.id === project.id);
 
-    if (index === -1) return null;
+        if (index === -1) return null;
 
-    projects[index] = project;
+        projects[index] = project;
 
-    if (!this.saveAll(projects)) return null;
-
-    return project;
-},
+        if (!this.saveAll(projects)) return null;
 
         return project;
     },
@@ -365,6 +364,9 @@ ${js}
 
         const projects = this.getAll();
         const index = projects.findIndex(item => item.id === project.id);
+
+        if (index === -1) return;
+
         projects[index] = project;
 
         if (!this.saveAll(projects)) return;
@@ -375,6 +377,7 @@ ${js}
 
     handleClick(event) {
         const tabButton = event.target.closest("[data-game-tab]");
+
         if (tabButton) {
             this.collectEditor();
             this.loadTab(tabButton.dataset.gameTab);
@@ -388,7 +391,12 @@ ${js}
 
         if (action === "create") this.create();
         if (action === "open") this.open(button.dataset.id);
-        if (action === "back") this.render();
+
+        if (action === "back") {
+            this.collectEditor();
+            this.render();
+        }
+
         if (action === "run") this.run();
         if (action === "commit") this.commit();
         if (action === "restore") this.restore(button.dataset.id);
@@ -403,6 +411,7 @@ ${js}
         container.addEventListener("input", event => {
             if (event.target.id === "gameCodeEditor") {
                 const project = this.getCurrent();
+
                 if (project) {
                     project.files[this.currentTab] = event.target.value;
                 }
@@ -410,7 +419,10 @@ ${js}
 
             if (event.target.id === "gameNameInput") {
                 const project = this.getCurrent();
-                if (project) project.name = event.target.value;
+
+                if (project) {
+                    project.name = event.target.value;
+                }
             }
         });
 
