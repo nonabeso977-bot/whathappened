@@ -207,112 +207,50 @@ const Themes = {
 
     },
 
-
     getCurrent() {
-
-        return localStorage.getItem(
-            this.storageKey
-        ) || "sky";
-
+        return localStorage.getItem(this.storageKey) || "black";
     },
-
 
     apply(themeId) {
 
-        const theme =
-            this.themes[themeId];
+        const theme = this.themes[themeId];
 
         if (!theme) {
             return;
         }
 
+        const root = document.documentElement;
 
-        const root =
-            document.documentElement;
+        root.style.setProperty("--theme-bg", theme.colors.bg);
+        root.style.setProperty("--theme-card", theme.colors.card);
+        root.style.setProperty("--theme-text", theme.colors.text);
+        root.style.setProperty("--theme-muted", theme.colors.muted);
+        root.style.setProperty("--theme-primary", theme.colors.primary);
+        root.style.setProperty("--theme-secondary", theme.colors.secondary);
+        root.style.setProperty("--theme-border", theme.colors.border);
+        root.style.setProperty("--theme-nav", theme.colors.nav);
 
-
-        root.style.setProperty(
-            "--theme-bg",
-            theme.colors.bg
-        );
-
-        root.style.setProperty(
-            "--theme-card",
-            theme.colors.card
-        );
-
-        root.style.setProperty(
-            "--theme-text",
-            theme.colors.text
-        );
-
-        root.style.setProperty(
-            "--theme-muted",
-            theme.colors.muted
-        );
-
-        root.style.setProperty(
-            "--theme-primary",
-            theme.colors.primary
-        );
-
-        root.style.setProperty(
-            "--theme-secondary",
-            theme.colors.secondary
-        );
-
-        root.style.setProperty(
-            "--theme-border",
-            theme.colors.border
-        );
-
-        root.style.setProperty(
-            "--theme-nav",
-            theme.colors.nav
-        );
-
-
-        localStorage.setItem(
-            this.storageKey,
-            themeId
-        );
-
+        localStorage.setItem(this.storageKey, themeId);
     },
-
 
     load() {
-
-        const themeId =
-            this.getCurrent();
-
+        const themeId = this.getCurrent();
         this.apply(themeId);
-
     },
 
-
     getThemeList() {
-
-        return Object.entries(
-            this.themes
-        ).map(([id, theme]) => ({
+        return Object.entries(this.themes).map(([id, theme]) => ({
             id: id,
             name: theme.name
         }));
-
     }
 
 };
-
 
 /* ========================================
    تحميل الثيم المحفوظ
 ======================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    () => {
-
-        Themes.load();
-
-    }
-);
+document.addEventListener("DOMContentLoaded", () => {
+    Themes.load();
+});
