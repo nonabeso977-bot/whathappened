@@ -239,17 +239,29 @@ const Games = {
     },
 
     collectEditor() {
-        const project = this.getCurrent();
-        const editor = document.getElementById("gameCodeEditor");
-        const nameInput = document.getElementById("gameNameInput");
+    const project = this.getCurrent();
+    const editor = document.getElementById("gameCodeEditor");
+    const nameInput = document.getElementById("gameNameInput");
 
-        if (!project || !editor) return null;
+    if (!project || !editor) return null;
 
-        project.files[this.currentTab] = editor.value;
+    project.files[this.currentTab] = editor.value;
 
-        if (nameInput && nameInput.value.trim()) {
-            project.name = nameInput.value.trim();
-        }
+    if (nameInput && nameInput.value.trim()) {
+        project.name = nameInput.value.trim();
+    }
+
+    const projects = this.getAll();
+    const index = projects.findIndex(item => item.id === project.id);
+
+    if (index === -1) return null;
+
+    projects[index] = project;
+
+    if (!this.saveAll(projects)) return null;
+
+    return project;
+},
 
         return project;
     },
