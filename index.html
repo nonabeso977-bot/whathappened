@@ -1,921 +1,762 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width, initial-scale=1.0"
-    >
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
     <title>Friends Boxes Open ♡</title>
 
-    <link
-        rel="stylesheet"
-        href="style.css"
-    >
+    <link rel="stylesheet" href="style.css">
+    <link rel="manifest" href="manifest.json">
 
-    <link
-        rel="manifest"
-        href="manifest.json"
-    >
+    <meta name="theme-color" content="#111111">
 
-    <meta
-        name="theme-color"
-        content="#8b6cff"
-    >
-
-    <link
-        rel="apple-touch-icon"
-        href="بدون اسم427_20260917141103.png"
-    >
+    <link rel="apple-touch-icon" href="بدون اسم427_20260917141103.png">
 </head>
 
 <body>
 
-    <div id="app">
+<div id="app">
 
-        <!-- =====================
-             الرئيسية
-        ====================== -->
+    <!-- الرئيسية / تصفح -->
 
-        <main
-            id="homePage"
-            class="page active"
-        >
+    <main id="homePage" class="page active">
 
-            <header class="top-header">
+        <header class="top-header">
 
-                <div>
-                    <h1>Friends Boxes Open ♡</h1>
-                    <p>مكان صغير للأصدقاء</p>
-                </div>
+            <div>
+                <h1>Friends Boxes Open ♡</h1>
+                <p>مكان صغير للأصدقاء</p>
+            </div>
+
+            <button
+                id="menuToggle"
+                class="icon-button"
+                type="button"
+                aria-label="فتح القائمة"
+                aria-expanded="false"
+            >
+                ☰
+            </button>
+
+        </header>
+
+        <div class="home-tabs">
+
+            <button
+                class="home-tab active"
+                type="button"
+                data-feed="everyone"
+            >
+                للكل
+            </button>
+
+            <button
+                class="home-tab"
+                type="button"
+                data-feed="friends"
+            >
+                أصدقائي
+            </button>
+
+        </div>
+
+        <section id="postsContainer" class="posts-container">
+
+            <div class="empty-state">
+
+                <div class="empty-icon">♡</div>
+
+                <h3>لا توجد منشورات بعد</h3>
+
+                <p>كوني أول من يكتب شيئًا</p>
 
                 <button
-                    id="openPostButton"
-                    class="icon-button"
+                    id="emptyPostButton"
+                    class="primary-button"
                     type="button"
-                    aria-label="منشور جديد"
                 >
-                    ＋
-                </button>
-
-            </header>
-
-
-            <div class="home-tabs">
-
-                <button
-                    class="home-tab active"
-                    type="button"
-                    data-feed="everyone"
-                >
-                    للكل
-                </button>
-
-                <button
-                    class="home-tab"
-                    type="button"
-                    data-feed="friends"
-                >
-                    أصدقائي
+                    ＋ اكتبي منشور
                 </button>
 
             </div>
 
+        </section>
 
-            <section
-                id="postsContainer"
-                class="posts-container"
+    </main>
+
+
+    <!-- المشاعر -->
+
+    <main id="feelingsPage" class="page">
+
+        <header class="page-header">
+
+            <button
+                class="back-button"
+                type="button"
+                data-back="homePage"
             >
+                ←
+            </button>
 
-                <div class="empty-state">
+            <div>
+                <h2>شعورك اليوم ♡</h2>
+                <p>اختاري الشعور الأقرب لك</p>
+            </div>
 
-                    <div class="empty-icon">
-                        ♡
-                    </div>
+        </header>
 
-                    <h3>لا توجد منشورات بعد</h3>
+        <section class="feeling-current-card">
 
-                    <p>
-                        كوني أول من يكتب شيئًا
-                    </p>
+            <span id="currentFeelingIcon">🌿</span>
 
-                    <button
-                        id="emptyPostButton"
-                        class="primary-button"
-                        type="button"
-                    >
-                        ＋ اكتبي منشور
-                    </button>
+            <div>
+                <strong id="currentFeelingText">موتر</strong>
+                <small>إحساسك الحالي</small>
+            </div>
 
-                </div>
+            <button
+                id="changeFeelingButton"
+                class="secondary-button"
+                type="button"
+            >
+                تغيير
+            </button>
 
-            </section>
+        </section>
 
-        </main>
+        <section class="feelings-grid">
+
+            <button type="button" class="feeling-option"
+                data-feeling="سعيدة" data-icon="☀️">
+                ☀️ <span>سعيدة</span>
+            </button>
+
+            <button type="button" class="feeling-option"
+                data-feeling="هادئة" data-icon="☕">
+                ☕ <span>هادئة</span>
+            </button>
+
+            <button type="button" class="feeling-option"
+                data-feeling="متوترة" data-icon="🌿">
+                🌿 <span>متوترة</span>
+            </button>
+
+            <button type="button" class="feeling-option"
+                data-feeling="خايفة" data-icon="🌙">
+                🌙 <span>خايفة</span>
+            </button>
+
+            <button type="button" class="feeling-option"
+                data-feeling="حزينة" data-icon="🌧️">
+                🌧️ <span>حزينة</span>
+            </button>
+
+            <button type="button" class="feeling-option"
+                data-feeling="وحيدة" data-icon="♡">
+                ♡ <span>وحيدة</span>
+            </button>
+
+        </section>
+
+    </main>
 
 
-        <!-- =====================
-             المشاعر
-        ====================== -->
+    <!-- الأصدقاء BFF -->
 
-        <main
-            id="feelingsPage"
-            class="page"
-        >
+    <main id="friendsPage" class="page">
 
-            <header class="page-header">
+        <header class="page-header">
+
+            <button
+                class="back-button"
+                type="button"
+                data-back="homePage"
+            >
+                ←
+            </button>
+
+            <div>
+                <h2>الأصدقاء ♡</h2>
+                <p>مكان أصحابك</p>
+            </div>
+
+        </header>
+
+        <section class="friend-box-card">
+
+            <h3>Friends Box ♡</h3>
+
+            <p>أضيفي أصحابك باستخدام الكود</p>
+
+            <div class="friend-code-display">
+
+                <span>كودك</span>
+
+                <strong id="friendCode">FRIEND-xxxxxx</strong>
 
                 <button
-                    class="back-button"
+                    id="copyFriendCode"
                     type="button"
-                    data-back="homePage"
+                    class="secondary-button"
                 >
-                    ←
+                    نسخ الكود
                 </button>
 
-                <div>
-                    <h2>شعورك اليوم ♡</h2>
-                    <p>اختاري الشعور الأقرب لك</p>
-                </div>
+            </div>
 
-            </header>
+            <div class="friend-add">
 
-
-            <section class="feeling-current-card">
-
-                <span id="currentFeelingIcon">
-                    🌿
-                </span>
-
-                <div>
-
-                    <strong id="currentFeelingText">
-                        موتر
-                    </strong>
-
-                    <small>
-                        إحساسك الحالي
-                    </small>
-
-                </div>
+                <input
+                    id="friendCodeInput"
+                    type="text"
+                    placeholder="FRIEND-XXXXXX"
+                    autocomplete="off"
+                >
 
                 <button
-                    id="changeFeelingButton"
+                    id="addFriendButton"
+                    class="primary-button"
+                    type="button"
+                >
+                    إضافة الصديق ♡
+                </button>
+
+            </div>
+
+        </section>
+
+        <section class="friends-section">
+
+            <h3>أصدقائي</h3>
+
+            <div id="friendsList">
+
+                <div class="empty-state small">
+
+                    <div class="empty-icon">♡</div>
+
+                    <p>ما عندكش أصدقاء مضافين لحد الآن ♡</p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- اللعب -->
+
+    <main id="gamesPage" class="page">
+
+        <header class="page-header">
+
+            <button
+                class="back-button"
+                type="button"
+                data-back="homePage"
+            >
+                ←
+            </button>
+
+            <div>
+                <h2>اللعب ♡</h2>
+                <p>مساحة ألعابنا الصغيرة</p>
+            </div>
+
+        </header>
+
+        <section id="gamesContainer" class="games-container">
+
+            <div class="empty-state">
+
+                <div class="empty-icon">🎮</div>
+
+                <h3>ما فيش ألعاب لحد الآن</h3>
+
+                <p>قريبًا بتكون هنا ألعابنا</p>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- الملف الشخصي -->
+
+    <main id="profilePage" class="page">
+
+        <header class="page-header">
+
+            <button
+                class="back-button"
+                type="button"
+                data-back="homePage"
+            >
+                ←
+            </button>
+
+            <h2>ملفي الشخصي ♡</h2>
+
+        </header>
+
+        <section class="profile-card">
+
+            <div id="profileAvatar" class="profile-avatar">♡</div>
+
+            <h2 id="profileName">مستخدم جديد</h2>
+
+            <p id="profileBio">Friends Boxes Open</p>
+
+            <div class="profile-buttons">
+
+                <button
+                    id="editProfileButton"
                     class="secondary-button"
                     type="button"
                 >
-                    تغيير
-                </button>
-
-            </section>
-
-
-            <section class="feelings-grid">
-
-                <button
-                    type="button"
-                    class="feeling-option"
-                    data-feeling="سعيدة"
-                    data-icon="☀️"
-                >
-                    ☀️
-                    <span>سعيدة</span>
+                    ✎ تعديل البروفايل
                 </button>
 
                 <button
+                    id="settingsButton"
+                    class="secondary-button"
                     type="button"
-                    class="feeling-option"
-                    data-feeling="هادئة"
-                    data-icon="☕"
                 >
-                    ☕
-                    <span>هادئة</span>
+                    ⚙ الإعدادات
                 </button>
 
-                <button
-                    type="button"
-                    class="feeling-option"
-                    data-feeling="متوترة"
-                    data-icon="🌿"
-                >
-                    🌿
-                    <span>متوترة</span>
-                </button>
+            </div>
 
-                <button
-                    type="button"
-                    class="feeling-option"
-                    data-feeling="خايفة"
-                    data-icon="🌙"
-                >
-                    🌙
-                    <span>خايفة</span>
-                </button>
-
-                <button
-                    type="button"
-                    class="feeling-option"
-                    data-feeling="حزينة"
-                    data-icon="🌧️"
-                >
-                    🌧️
-                    <span>حزينة</span>
-                </button>
-
-                <button
-                    type="button"
-                    class="feeling-option"
-                    data-feeling="وحيدة"
-                    data-icon="♡"
-                >
-                    ♡
-                    <span>وحيدة</span>
-                </button>
-
-            </section>
-
-        </main>
+        </section>
 
 
-        <!-- =====================
-             الأصدقاء
-        ====================== -->
+        <!-- الحساب -->
 
-        <main
-            id="friendsPage"
-            class="page"
-        >
+        <section id="authBox" class="auth-card">
 
-            <header class="page-header">
+            <div id="loggedOutBox">
 
-                <button
-                    class="back-button"
-                    type="button"
-                    data-back="homePage"
-                >
-                    ←
-                </button>
-
-                <div>
-                    <h2>الأصدقاء ♡</h2>
-                    <p>مكان أصحابك</p>
-                </div>
-
-            </header>
-
-
-            <section class="friend-box-card">
-
-                <h3>Friends Box ♡</h3>
+                <h3>حسابي ♡</h3>
 
                 <p>
-                    أضيفي أصحابك باستخدام الكود
+                    سجلي دخولك باش نحفظ حسابك وأصدقاءك أونلاين
                 </p>
 
+                <input
+                    id="authEmail"
+                    type="email"
+                    placeholder="الإيميل"
+                    autocomplete="email"
+                >
 
-                <div class="friend-code-display">
+                <input
+                    id="authPassword"
+                    type="password"
+                    placeholder="كلمة السر"
+                    autocomplete="current-password"
+                >
 
-                    <span>كودك</span>
-
-                    <strong id="friendCode">
-                        FRIEND-xxxxxx
-                    </strong>
+                <div class="auth-buttons">
 
                     <button
-                        id="copyFriendCode"
-                        type="button"
+                        id="signUpButton"
                         class="secondary-button"
+                        type="button"
                     >
-                        نسخ الكود
+                        إنشاء حساب ♡
                     </button>
 
-                </div>
-
-
-                <div class="friend-add">
-
-                    <input
-                        id="friendCodeInput"
-                        type="text"
-                        placeholder="FRIEND-XXXXXX"
-                        autocomplete="off"
-                    >
-
                     <button
-                        id="addFriendButton"
+                        id="signInButton"
                         class="primary-button"
                         type="button"
                     >
-                        إضافة الصديق ♡
+                        تسجيل الدخول
                     </button>
 
                 </div>
 
-            </section>
+                <p id="authMessage"></p>
+
+            </div>
 
 
-            <section class="friends-section">
+            <div id="loggedInBox" style="display:none;">
 
-                <h3>أصدقائي</h3>
+                <h3>حسابك متصل ♡</h3>
 
-                <div id="friendsList">
-
-                    <div class="empty-state small">
-
-                        <div class="empty-icon">
-                            ♡
-                        </div>
-
-                        <p>
-                            ما عندكش أصدقاء مضافين لحد الآن ♡
-                        </p>
-
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
-
-
-        <!-- =====================
-             التذكيرات
-        ====================== -->
-
-        <main
-            id="remindersPage"
-            class="page"
-        >
-
-            <header class="page-header">
+                <p id="loggedInEmail">تم تسجيل الدخول</p>
 
                 <button
-                    class="back-button"
-                    type="button"
-                    data-back="homePage"
-                >
-                    ←
-                </button>
-
-                <div>
-                    <h2>تذكيراتي ♡</h2>
-                    <p>حاجات صغيرة ما نبيوش ننساوها</p>
-                </div>
-
-            </header>
-
-
-            <button
-                id="addReminderButton"
-                class="primary-button full-button"
-                type="button"
-            >
-                ＋ إضافة تذكير
-            </button>
-
-
-           <section
-    id="remindersContainer"
-    class="reminders-list"
-></section>
-
-        </main>
-
-
-        <!-- =====================
-             الملف الشخصي
-        ====================== -->
-
-        <main
-            id="profilePage"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <button
-                    class="back-button"
-                    type="button"
-                    data-back="homePage"
-                >
-                    ←
-                </button>
-
-                <h2>ملفي الشخصي ♡</h2>
-
-            </header>
-
-
-            <section class="profile-card">
-
-                <div
-                    id="profileAvatar"
-                    class="profile-avatar"
-                >
-                    ♡
-                </div>
-
-
-                <h2 id="profileName">
-                    مستخدم جديد
-                </h2>
-
-                <p id="profileBio">
-                    Friends Boxes Open
-                </p>
-
-
-                <div class="profile-buttons">
-
-                    <button
-                        id="editProfileButton"
-                        class="secondary-button"
-                        type="button"
-                    >
-                        ✎ تعديل البروفايل
-                    </button>
-
-                    <button
-                        id="settingsButton"
-                        class="secondary-button"
-                        type="button"
-                    >
-                        ⚙ الإعدادات
-                    </button>
-
-                </div>
-
-            </section>
-
-
-            <!-- =====================
-                 الحساب
-            ====================== -->
-
-            <section
-                id="authBox"
-                class="auth-card"
-            >
-
-                <!-- غير مسجل -->
-
-                <div id="loggedOutBox">
-
-                    <h3>حسابي ♡</h3>
-
-                    <p>
-                        سجلي دخولك باش نحفظ حسابك وأصدقاءك أونلاين
-                    </p>
-
-
-                    <input
-                        id="authEmail"
-                        type="email"
-                        placeholder="الإيميل"
-                        autocomplete="email"
-                    >
-
-
-                    <input
-                        id="authPassword"
-                        type="password"
-                        placeholder="كلمة السر"
-                        autocomplete="current-password"
-                    >
-
-
-                    <div class="auth-buttons">
-
-                        <button
-                            id="signUpButton"
-                            class="secondary-button"
-                            type="button"
-                        >
-                            إنشاء حساب ♡
-                        </button>
-
-                        <button
-                            id="signInButton"
-                            class="primary-button"
-                            type="button"
-                        >
-                            تسجيل الدخول
-                        </button>
-
-                    </div>
-
-
-                    <p id="authMessage"></p>
-
-                </div>
-
-
-                <!-- مسجل الدخول -->
-
-                <div
-                    id="loggedInBox"
-                    style="display:none;"
-                >
-
-                    <h3>حسابك متصل ♡</h3>
-
-                    <p id="loggedInEmail">
-                        تم تسجيل الدخول
-                    </p>
-
-                    <button
-                        id="logoutButton"
-                        class="secondary-button full-button"
-                        type="button"
-                    >
-                        تسجيل الخروج
-                    </button>
-
-                </div>
-
-            </section>
-
-
-            <!-- =====================
-                 الإحصائيات
-            ====================== -->
-
-            <section class="profile-stats">
-
-                <div>
-                    <strong id="postCount">0</strong>
-                    <span>منشورات</span>
-                </div>
-
-                <div>
-                    <strong id="likeCount">0</strong>
-                    <span>إعجابات</span>
-                </div>
-
-                <div>
-                    <strong id="profileFeeling">
-                        🌿
-                    </strong>
-                    <span>إحساسي اليوم</span>
-                </div>
-
-            </section>
-
-        </main>
-
-
-        <!-- =====================
-             الإعدادات
-        ====================== -->
-
-        <main
-            id="settingsPage"
-            class="page"
-        >
-
-            <header class="page-header">
-
-                <button
-                    id="backToProfileButton"
-                    class="back-button"
-                    type="button"
-                >
-                    ←
-                </button>
-
-                <div>
-                    <h2>الإعدادات ⚙</h2>
-                    <p>رتبي التطبيق بالطريقة اللي تعجبك</p>
-                </div>
-
-            </header>
-
-
-            <section class="settings-card">
-
-                <div class="settings-title">
-
-                    <span>🎨</span>
-
-                    <div>
-                        <h3>المظهر</h3>
-                        <p>اختاري الثيم اللي يعجبك</p>
-                    </div>
-
-                </div>
-
-
-                <div
-                    id="themeList"
-                    class="theme-list"
-                ></div>
-
-            </section>
-
-
-            <section class="settings-card">
-
-                <div class="settings-title">
-
-                    <span>♡</span>
-
-                    <div>
-                        <h3>الحساب</h3>
-                        <p>إدارة الحساب</p>
-                    </div>
-
-                </div>
-
-                <div id="accountSettings"></div>
-
-            </section>
-
-
-            <section class="settings-card">
-
-                <div class="settings-title">
-
-                    <span>♧</span>
-
-                    <div>
-                        <h3>Friends Box</h3>
-                        <p>إعدادات الأصدقاء</p>
-                    </div>
-
-                </div>
-
-                <button
-                    id="settingsFriendsButton"
+                    id="logoutButton"
                     class="secondary-button full-button"
                     type="button"
                 >
-                    إدارة الأصدقاء
+                    تسجيل الخروج
                 </button>
-
-            </section>
-
-
-            <section class="settings-card">
-
-                <div class="settings-title">
-
-                    <span>♡</span>
-
-                    <div>
-                        <h3>التطبيق</h3>
-                        <p>Friends Boxes Open ♡</p>
-                    </div>
-
-                </div>
-
-            </section>
-
-        </main>
-
-
-        <!-- =====================
-             شريط التنقل
-        ====================== -->
-
-        <nav
-            class="bottom-nav"
-            id="bottomNav"
-        >
-
-            <button
-                class="nav-item active"
-                type="button"
-                data-page="homePage"
-            >
-                <span>⌂</span>
-                <small>الرئيسية</small>
-            </button>
-
-
-            <button
-                class="nav-item"
-                type="button"
-                data-page="feelingsPage"
-            >
-                <span>♡</span>
-                <small>المشاعر</small>
-            </button>
-
-
-            <button
-                class="nav-create"
-                id="navCreateButton"
-                type="button"
-                aria-label="منشور جديد"
-            >
-                ＋
-            </button>
-
-
-            <button
-                class="nav-item"
-                type="button"
-                data-page="friendsPage"
-            >
-                <span>♧</span>
-                <small>الأصدقاء</small>
-            </button>
-
-
-            <button
-                class="nav-item"
-                type="button"
-                data-page="remindersPage"
-            >
-                <span>⌚</span>
-                <small>التذكيرات</small>
-            </button>
-
-
-            <button
-                class="nav-item profile-nav-item"
-                type="button"
-                data-page="profilePage"
-            >
-                <span>☻</span>
-                <small>ملفي</small>
-            </button>
-
-        </nav>
-
-    </div>
-
-
-    <!-- =========================
-         نافذة المنشور
-    ========================== -->
-
-    <div
-        id="postModal"
-        class="modal hidden"
-    >
-
-        <div class="modal-box">
-
-            <header class="modal-header">
-
-                <h2>منشور جديد ♡</h2>
-
-                <button
-                    id="closePostModal"
-                    class="close-button"
-                    type="button"
-                >
-                    ×
-                </button>
-
-            </header>
-
-
-            <textarea
-                id="postText"
-                placeholder="اكتبي شيء..."
-                maxlength="1000"
-            ></textarea>
-
-
-            <div class="image-upload">
-
-                <label
-                    for="postImageInput"
-                    class="secondary-button"
-                >
-                    إضافة صورة ♡
-                </label>
-
-                <input
-                    id="postImageInput"
-                    type="file"
-                    accept="image/*"
-                    hidden
-                >
 
             </div>
 
+        </section>
 
-            <div id="imagePreview"></div>
+
+        <!-- الإحصائيات -->
+
+        <section class="profile-stats">
+
+            <div>
+                <strong id="postCount">0</strong>
+                <span>منشورات</span>
+            </div>
+
+            <div>
+                <strong id="likeCount">0</strong>
+                <span>إعجابات</span>
+            </div>
+
+            <div>
+                <strong id="profileFeeling">🌿</strong>
+                <span>إحساسي اليوم</span>
+            </div>
+
+        </section>
+
+    </main>
 
 
-            <label for="postVisibility">
-                من يستطيع رؤية المنشور؟
-            </label>
+    <!-- الإعدادات -->
 
-            <select id="postVisibility">
+    <main id="settingsPage" class="page">
 
-                <option value="everyone">
-                    الجميع
-                </option>
-
-                <option value="friends">
-                    الأصدقاء
-                </option>
-
-            </select>
-
+        <header class="page-header">
 
             <button
-                id="publishPostButton"
-                class="primary-button full-button"
+                id="backToProfileButton"
+                class="back-button"
                 type="button"
             >
-                نشر ♡
+                ←
             </button>
 
-        </div>
+            <div>
+                <h2>الإعدادات ⚙</h2>
+                <p>رتبي التطبيق بالطريقة اللي تعجبك</p>
+            </div>
 
-    </div>
+        </header>
+
+        <section class="settings-card">
+
+            <div class="settings-title">
+
+                <span>🎨</span>
+
+                <div>
+                    <h3>المظهر</h3>
+                    <p>اختاري الثيم اللي يعجبك</p>
+                </div>
+
+            </div>
+
+            <div id="themeList" class="theme-list"></div>
+
+        </section>
 
 
-    <!-- =========================
-         نافذة الرسائل
-    ========================== -->
+        <section class="settings-card">
 
-    <div
-        id="messageModal"
-        class="modal hidden"
+            <div class="settings-title">
+
+                <span>♡</span>
+
+                <div>
+                    <h3>الحساب</h3>
+                    <p>إدارة الحساب</p>
+                </div>
+
+            </div>
+
+            <div id="accountSettings"></div>
+
+        </section>
+
+
+        <section class="settings-card">
+
+            <div class="settings-title">
+
+                <span>♧</span>
+
+                <div>
+                    <h3>Friends Box</h3>
+                    <p>إعدادات الأصدقاء</p>
+                </div>
+
+            </div>
+
+            <button
+                id="settingsFriendsButton"
+                class="secondary-button full-button"
+                type="button"
+            >
+                إدارة الأصدقاء
+            </button>
+
+        </section>
+
+
+        <section class="settings-card">
+
+            <div class="settings-title">
+
+                <span>♡</span>
+
+                <div>
+                    <h3>التطبيق</h3>
+                    <p>Friends Boxes Open ♡</p>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+
+    <!-- القائمة الجانبية -->
+
+    <div id="menuOverlay" class="menu-overlay"></div>
+
+    <aside
+        id="sideMenu"
+        class="side-menu"
+        aria-label="القائمة الرئيسية"
+        aria-hidden="true"
     >
 
-        <div class="modal-box">
+        <div class="side-menu-header">
+            <h3>القائمة ♡</h3>
 
-            <header class="modal-header">
+            <button
+                id="closeSideMenu"
+                class="close-button"
+                type="button"
+                aria-label="إغلاق القائمة"
+            >
+                ×
+            </button>
+        </div>
 
-                <h2 id="messageModalTitle">
-                    رسالة
-                </h2>
+        <button
+            class="side-menu-item"
+            type="button"
+            data-page="settingsPage"
+        >
+            ⚙ الإعدادات
+        </button>
 
-                <button
-                    id="closeMessageModal"
-                    class="close-button"
-                    type="button"
-                >
-                    ×
-                </button>
+        <button
+            class="side-menu-item"
+            type="button"
+            data-page="settingsPage"
+            data-menu-action="themes"
+        >
+            🎨 الثيمات
+        </button>
 
-            </header>
+        <button
+            class="side-menu-item"
+            type="button"
+            data-page="profilePage"
+        >
+            ☻ البروفايل
+        </button>
+
+    </aside>
 
 
-            <div id="messageModalContent"></div>
+    <!-- شريط التنقل -->
+
+    <nav class="bottom-nav" id="bottomNav">
+
+        <button
+            class="nav-item"
+            type="button"
+            data-page="gamesPage"
+        >
+            <span>🎮</span>
+            <small>اللعب</small>
+        </button>
+
+        <button
+            class="nav-item active"
+            type="button"
+            data-page="homePage"
+        >
+            <span>⌂</span>
+            <small>تصفح</small>
+        </button>
+
+        <button
+            class="nav-create"
+            id="navCreateButton"
+            type="button"
+            aria-label="منشور جديد"
+        >
+            ＋
+        </button>
+
+        <button
+            class="nav-item"
+            type="button"
+            data-page="feelingsPage"
+        >
+            <span>♡</span>
+            <small>الإحساس</small>
+        </button>
+
+        <button
+            class="nav-item"
+            type="button"
+            data-page="friendsPage"
+        >
+            <span>♧</span>
+            <small>BFF</small>
+        </button>
+
+    </nav>
+
+</div>
+
+
+<!-- نافذة المنشور -->
+
+<div id="postModal" class="modal hidden">
+
+    <div class="modal-box">
+
+        <header class="modal-header">
+
+            <h2>منشور جديد ♡</h2>
+
+            <button
+                id="closePostModal"
+                class="close-button"
+                type="button"
+            >
+                ×
+            </button>
+
+        </header>
+
+        <textarea
+            id="postText"
+            placeholder="اكتبي شيء..."
+            maxlength="1000"
+        ></textarea>
+
+        <div class="image-upload">
+
+            <label for="postImageInput" class="secondary-button">
+                إضافة صورة ♡
+            </label>
+
+            <input
+                id="postImageInput"
+                type="file"
+                accept="image/*"
+                hidden
+            >
 
         </div>
 
+        <div id="imagePreview"></div>
+
+        <label for="postVisibility">
+            من يستطيع رؤية المنشور؟
+        </label>
+
+        <select id="postVisibility">
+
+            <option value="everyone">الجميع</option>
+            <option value="friends">الأصدقاء</option>
+
+        </select>
+
+        <button
+            id="publishPostButton"
+            class="primary-button full-button"
+            type="button"
+        >
+            نشر ♡
+        </button>
+
     </div>
 
+</div>
 
-    <!-- =========================
-         الملفات البرمجية
-    ========================== -->
 
-    <script src="storage.js"></script>
+<!-- نافذة الرسائل -->
 
+<div id="messageModal" class="modal hidden">
+
+    <div class="modal-box">
+
+        <header class="modal-header">
+
+            <h2 id="messageModalTitle">رسالة</h2>
+
+            <button
+                id="closeMessageModal"
+                class="close-button"
+                type="button"
+            >
+                ×
+            </button>
+
+        </header>
+
+        <div id="messageModalContent"></div>
+
+    </div>
+
+</div>
+
+
+<!-- الملفات البرمجية -->
+
+<script src="storage.js"></script>
 <script src="utils.js"></script>
+<script src="posts.js"></script>
+<script src="feelings.js"></script>
+<script src="interface.js"></script>
 
-    <script src="posts.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 
-    <script src="feelings.js"></script>
+<script src="online.js"></script>
+<script src="friends.js"></script>
+<script src="theme.js"></script>
+<script src="sitting.js"></script>
+<script src="auth.js"></script>
 
-    <script src="reminders.js"></script>
+<script>
+    if ("serviceWorker" in navigator) {
 
-    <script src="interface.js"></script>
+        window.addEventListener("load", () => {
 
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+            navigator.serviceWorker.register("service-worker.js");
 
-    <script src="online.js"></script>
+        });
 
-    <script src="friends.js"></script>
-
-    <script src="theme.js"></script>
-
-    <script src="sitting.js"></script>
-
-    <script src="auth.js"></script>
-
-    <script>
-        if ("serviceWorker" in navigator) {
-
-            window.addEventListener(
-                "load",
-                () => {
-
-                    
-                    navigator.serviceWorker.register(
-                        "service-worker.js"
-                    );
-
-                }
-            );
-
-        }
-    </script>
+    }
+</script>
 
 </body>
-
 </html>
