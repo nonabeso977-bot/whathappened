@@ -4,23 +4,9 @@ const Games = {
     currentTab: "html",
 
     starterFiles: {
-        html: `<main class="game">
-    <h1>لعبتي الأولى</h1>
-    <p>ابدئي بكتابة لعبتك هنا.</p>
-</main>`,
-        css: `body {
-    font-family: system-ui, sans-serif;
-    text-align: center;
-    background: #fceaf3;
-    color: #493344;
-    padding: 24px;
-}
-
-.game {
-    max-width: 500px;
-    margin: 30px auto;
-}`,
-        js: `console.log("My game is running!");`
+        html: '<main class="game"><h1>لعبتي الأولى</h1><p>ابدئي بكتابة لعبتك هنا.</p></main>',
+        css: 'body { font-family: system-ui, sans-serif; text-align: center; background: #fceaf3; color: #493344; padding: 24px; } .game { max-width: 500px; margin: 30px auto; }',
+        js: 'console.log("My game is running!");'
     },
 
     getAll() {
@@ -38,7 +24,7 @@ const Games = {
             return true;
         } catch (error) {
             console.error("Games save error:", error);
-            this.message("مساحة التخزين ممتلئة. قللي حجم المشروع أو عدد الإصدارات.");
+            this.message("مساحة التخزين ممتلئة.");
             return false;
         }
     },
@@ -68,7 +54,6 @@ const Games = {
         const project = {
             id: "game_" + Date.now(),
             name: name.trim(),
-            description: "",
             files: { ...this.starterFiles },
             commits: [],
             updatedAt: new Date().toISOString()
@@ -87,15 +72,13 @@ const Games = {
         return this.getAll().find(project => project.id === this.currentId);
     },
 
-    updateCurrent(field, value) {
+    updateProject(project) {
         const projects = this.getAll();
-        const project = projects.find(item => item.id === this.currentId);
+        const index = projects.findIndex(item => item.id === project.id);
 
-        if (!project) return false;
+        if (index < 0) return false;
 
-        project[field] = value;
-        project.updatedAt = new Date().toISOString();
-
+        projects[index] = project;
         return this.saveAll(projects);
     },
 
@@ -109,46 +92,150 @@ const Games = {
 
         container.innerHTML = `
             <section class="games-welcome">
-                <div class="games-welcome-icon">⌘</div>
+                <div class="games-welcome-icon">🎮</div>
                 <h3>استوديو الألعاب</h3>
-                <p>اكتبي الكود، جرّبي لعبتك، واحفظي إصداراتك.</p>
-                <button class="primary-button" data-game-action="create">
-                    ＋ مشروع جديد
-                </button>
+                <p>كل لعبة تصنعينها لها مربعها الخاص.</p>
             </section>
 
             <section class="games-project-section">
-                <h3>مشاريعي (${projects.length})</h3>
+                <h3>ألعابي (${projects.length})</h3>
+
                 <div class="games-project-list">
-                    ${projects.length ? projects.map(project => `
-                        <article class="game-project-card">
-                            <div>
-                                <strong>${this.escape(project.name)}</strong>
-                                <small>${(project.commits || []).length} إصدار</small>
-                            </div>
-                            <button class="secondary-button"
-                                data-game-action="open"
-                                data-id="${this.escape(project.id)}">
-                                فتح المشروع
-                            </button>
-                        </article>
-                    `).join("") : `
-                        <div class="empty-state small">
-                            <div class="empty-icon">🎮</div>
-                            <p>ما عندكش مشاريع لحد الآن.</p>
-                        </div>
-                    `}
+                    ${projects.map(project => `
+                        <button type="button"
+                            class="game-project-card"
+                            data-game-action="open"
+                            data-id="${this.escape(project.id)}">
+
+                            <span class="game-tile-icon">🎮</span>
+                            <strong>${this.escape(project.name)}</strong>
+                            <small>${(project.commits || []).length} إصدار</small>
+                        </button>
+                    `).join("")}
+
+                    <button type="button"
+                        class="game-project-card game-add-card"
+                        data-game-action="create">
+
+                        <span class="game-add-icon">＋</span>
+                        <strong>لعبة جديدة</strong>
+                        <small>ابدئي مشروعًا جديدًا</small>
+                    </button>
                 </div>
+
+                ${projects.length ? "" :
+                    '<p class="game-empty-note">مربعاتك فاضية حاليًا. اضغطي على (+) وابدئي أول لعبة.</p>'
+                }
             </section>
         `;
     },
 
+    buildDocument(project) {
+        const css = (project.files.css || "")
+            .replace(/<\/style/gi, "<\\/style");
+
+        const js = (project.files.js || "")
+            .replace(/<\/script/gi, "<\\/script");
+
+        return '<!DOCTYPE html><html lang="ar"><head>' +
+            '<meta charset="UTF-8">' +
+            '<meta name="viewport" content="width=device-width, initial-scale=1.0">' +
+            '<style>*{box-sizing:border-box}body{margin:0;padding:12px}' +
+            css +
+            '</style></head><body>' +
+            (project.files.html || '') +
+            '<script>' + js + '<\/script></body></html>';
+    },
+
+    refreshFrame(id) {
+        const project = this.getCurrent();
+        const frame = document.getElementById(id);
+
+        if (project && frame) {
+            frame.srcdoc = this.buildDocument(project);
+        }
+    },
+
     open(id) {
-        const project = this.getAll().find(item => item.id === id);
-        if (!project) return;
+        if (!this.getAll().some(project => project.id === id)) return;
 
         this.currentId = id;
-        this.renderEditor();
+        this.renderDetail();
+    },
+
+    renderDetail() {
+        const container = document.getElementById("gamesContainer");
+        const project = this.getCurrent();
+
+        if (!container || !project) return;
+
+        container.innerHTML = `
+            <section class="game-detail">
+
+                <header class="game-detail-header">
+                    <button class="secondary-button"
+                        data-game-action="back">← ألعابي</button>
+
+                    <div>
+                        <h3>${this.escape(project.name)}</h3>
+                        <small>${(project.commits || []).length} إصدار محفوظ</small>
+                    </div>
+                </header>
+
+                <div class="game-detail-preview-wrap">
+                    <iframe id="gameDetailPreview"
+                        class="game-detail-preview"
+                        title="معاينة اللعبة"
+                        sandbox="allow-scripts allow-forms allow-pointer-lock">
+                    </iframe>
+                </div>
+
+                <div class="game-detail-actions">
+                    <button class="primary-button game-play-button"
+                        data-game-action="play">▶ لعب</button>
+
+                    <button class="secondary-button"
+                        data-game-action="edit">✎ تعديل</button>
+                </div>
+
+                <p class="game-detail-hint">
+                    اللعب يفتح لعبتك وحدها، والتعديل يرجعك إلى محرر الأكواد.
+                </p>
+
+            </section>
+        `;
+
+        this.refreshFrame("gameDetailPreview");
+    },
+
+    play() {
+        const project = this.getCurrent();
+        if (!project) return;
+
+        const overlay = document.createElement("div");
+
+        overlay.className = "game-play-overlay";
+        overlay.id = "gamePlayOverlay";
+
+        overlay.innerHTML = `
+            <header class="game-play-header">
+                <strong>${this.escape(project.name)}</strong>
+
+                <button type="button"
+                    class="game-play-close"
+                    data-game-action="close-play">×</button>
+            </header>
+
+            <iframe id="gamePlayFrame"
+                class="game-play-frame"
+                title="اللعبة"
+                sandbox="allow-scripts allow-forms allow-pointer-lock">
+            </iframe>
+        `;
+
+        document.body.appendChild(overlay);
+
+        this.refreshFrame("gamePlayFrame");
     },
 
     renderEditor() {
@@ -161,59 +248,72 @@ const Games = {
 
         container.innerHTML = `
             <section class="game-editor">
+
                 <header class="game-editor-header">
                     <button class="secondary-button"
-                        data-game-action="back">← مشاريعي</button>
-                    <span>محرر الأكواد</span>
+                        data-game-action="back-detail">← رجوع للعبة</button>
+
+                    <span>تعديل اللعبة</span>
                 </header>
 
-                <label class="game-field-label" for="gameNameInput">
-                    اسم المشروع
-                </label>
-                <input id="gameNameInput" class="game-name-input"
-                    maxlength="60" value="${this.escape(project.name)}">
+                <label class="game-field-label">اسم اللعبة</label>
+
+                <input id="gameNameInput"
+                    class="game-name-input"
+                    maxlength="60"
+                    value="${this.escape(project.name)}">
 
                 <div class="game-file-tabs">
                     <button class="game-file-tab active"
                         data-game-tab="html">HTML</button>
+
                     <button class="game-file-tab"
                         data-game-tab="css">CSS</button>
+
                     <button class="game-file-tab"
                         data-game-tab="js">JavaScript</button>
                 </div>
 
-                <label class="game-field-label" id="gameEditorLabel">
-                    index.html
-                </label>
-                <textarea id="gameCodeEditor" class="game-code-editor"
-                    spellcheck="false" autocapitalize="off"
-                    autocomplete="off" autocorrect="off"
+                <label class="game-field-label"
+                    id="gameEditorLabel">index.html</label>
+
+                <textarea id="gameCodeEditor"
+                    class="game-code-editor"
+                    spellcheck="false"
+                    autocapitalize="off"
+                    autocomplete="off"
+                    autocorrect="off"
                     dir="ltr"></textarea>
 
                 <div class="game-editor-actions">
                     <button class="primary-button"
-                        data-game-action="run">▶ تشغيل</button>
+                        data-game-action="preview">▶ معاينة</button>
+
                     <button class="secondary-button"
-                        data-game-action="commit">Commit</button>
+                        data-game-action="commit">حفظ إصدار</button>
                 </div>
 
                 <section class="game-preview-section">
-                    <h3>معاينة اللعبة</h3>
+                    <h3>معاينة سريعة</h3>
+
                     <iframe id="gamePreview"
                         class="game-preview"
                         title="معاينة اللعبة"
-                        sandbox="allow-scripts"></iframe>
+                        sandbox="allow-scripts allow-forms allow-pointer-lock">
+                    </iframe>
                 </section>
 
                 <section class="game-commits">
-                    <h3>سجل الإصدارات</h3>
+                    <h3>الإصدارات المحفوظة</h3>
                     <div id="gameCommitList"></div>
                 </section>
+
             </section>
         `;
 
         this.loadTab("html");
         this.renderCommits();
+        this.refreshFrame("gamePreview");
     },
 
     loadTab(tab) {
@@ -243,87 +343,52 @@ const Games = {
     collectEditor() {
         const project = this.getCurrent();
         const editor = document.getElementById("gameCodeEditor");
-        const nameInput = document.getElementById("gameNameInput");
+        const name = document.getElementById("gameNameInput");
 
         if (!project || !editor) return null;
 
         project.files[this.currentTab] = editor.value;
 
-        if (nameInput && nameInput.value.trim()) {
-            project.name = nameInput.value.trim();
+        if (name && name.value.trim()) {
+            project.name = name.value.trim();
         }
 
-        const projects = this.getAll();
-        const index = projects.findIndex(item => item.id === project.id);
+        project.updatedAt = new Date().toISOString();
 
-        if (index === -1) return null;
-
-        projects[index] = project;
-
-        if (!this.saveAll(projects)) return null;
-
-        return project;
+        return this.updateProject(project) ? project : null;
     },
 
-    run() {
-        const project = this.collectEditor();
-        const frame = document.getElementById("gamePreview");
+    preview() {
+        if (!this.collectEditor()) return;
 
-        if (!project || !frame) return;
+        this.refreshFrame("gamePreview");
 
-        const html = project.files.html || "";
-        const css = (project.files.css || "").replace(/<\/style/gi, "<\\/style");
-        const js = (project.files.js || "").replace(/<\/script/gi, "<\\/script");
-
-        frame.srcdoc = `
-<!DOCTYPE html>
-<html lang="ar">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<style>
-* { box-sizing: border-box; }
-body { margin: 0; padding: 12px; }
-${css}
-</style>
-</head>
-<body>
-${html}
-<script>
-${js}
-<\/script>
-</body>
-</html>`;
-
-        this.message("تم تشغيل المعاينة. التعديلات الحالية لم تُحفظ كإصدار بعد.");
+        this.message("تم تحديث المعاينة.");
     },
 
     commit() {
         const project = this.collectEditor();
         if (!project) return;
 
-        const message = prompt("اكتبي وصفًا لهذا التعديل:");
-        if (message === null || !message.trim()) return;
+        const description = prompt("اكتبي وصفًا لهذا الإصدار:");
 
-        const projects = this.getAll();
-        const index = projects.findIndex(item => item.id === project.id);
+        if (description === null || !description.trim()) return;
 
-        if (index === -1) return;
+        project.commits = project.commits || [];
 
-        projects[index].commits.unshift({
+        project.commits.unshift({
             id: "commit_" + Date.now(),
-            message: message.trim(),
+            message: description.trim(),
             files: { ...project.files },
             createdAt: new Date().toISOString()
         });
 
-        projects[index].commits = projects[index].commits.slice(0, 20);
-        projects[index].updatedAt = new Date().toISOString();
+        project.commits = project.commits.slice(0, 20);
 
-        if (!this.saveAll(projects)) return;
+        if (!this.updateProject(project)) return;
 
         this.renderCommits();
-        this.message("تم حفظ الإصدار الجديد بنجاح.");
+        this.message("تم حفظ الإصدار.");
     },
 
     renderCommits() {
@@ -332,55 +397,46 @@ ${js}
 
         if (!container || !project) return;
 
-        container.innerHTML = project.commits.length
+        container.innerHTML = (project.commits || []).length
             ? project.commits.map(commit => `
                 <article class="game-commit-item">
                     <div>
                         <strong>${this.escape(commit.message)}</strong>
                         <small>${new Date(commit.createdAt).toLocaleString("ar")}</small>
                     </div>
+
                     <button class="secondary-button"
                         data-game-action="restore"
-                        data-id="${this.escape(commit.id)}">
-                        استعادة
-                    </button>
+                        data-id="${this.escape(commit.id)}">استعادة</button>
                 </article>
             `).join("")
-            : `<p class="game-muted">ما فيش إصدارات محفوظة بعد.</p>`;
+            : '<p class="game-muted">ما فيش إصدارات محفوظة بعد.</p>';
     },
 
     restore(id) {
         const project = this.getCurrent();
         if (!project) return;
 
-        const commit = project.commits.find(item => item.id === id);
-        if (!commit) return;
+        const commit = (project.commits || []).find(item => item.id === id);
 
-        if (!confirm("استعادة هذا الإصدار؟ سيحل محل الكود الحالي في المحرر.")) {
+        if (!commit || !confirm("استعادة هذا الإصدار؟ سيحل محل الكود الحالي.")) {
             return;
         }
 
         project.files = { ...commit.files };
 
-        const projects = this.getAll();
-        const index = projects.findIndex(item => item.id === project.id);
-
-        if (index === -1) return;
-
-        projects[index] = project;
-
-        if (!this.saveAll(projects)) return;
+        if (!this.updateProject(project)) return;
 
         this.renderEditor();
-        this.message("تمت استعادة الإصدار. اعملي Commit جديد لو تبي تحفظي التغيير كإصدار.");
+        this.message("تمت استعادة الإصدار.");
     },
 
     handleClick(event) {
-        const tabButton = event.target.closest("[data-game-tab]");
+        const tab = event.target.closest("[data-game-tab]");
 
-        if (tabButton) {
+        if (tab) {
             this.collectEditor();
-            this.loadTab(tabButton.dataset.gameTab);
+            this.loadTab(tab.dataset.gameTab);
             return;
         }
 
@@ -391,13 +447,21 @@ ${js}
 
         if (action === "create") this.create();
         if (action === "open") this.open(button.dataset.id);
+        if (action === "back") this.render();
+        if (action === "edit") this.renderEditor();
 
-        if (action === "back") {
+        if (action === "back-detail") {
             this.collectEditor();
-            this.render();
+            this.renderDetail();
         }
 
-        if (action === "run") this.run();
+        if (action === "play") this.play();
+
+        if (action === "close-play") {
+            document.getElementById("gamePlayOverlay")?.remove();
+        }
+
+        if (action === "preview") this.preview();
         if (action === "commit") this.commit();
         if (action === "restore") this.restore(button.dataset.id);
     },
@@ -406,23 +470,27 @@ ${js}
         const container = document.getElementById("gamesContainer");
         if (!container) return;
 
-        container.addEventListener("click", event => this.handleClick(event));
+        container.addEventListener("click", event => {
+            this.handleClick(event);
+        });
 
         container.addEventListener("input", event => {
-            if (event.target.id === "gameCodeEditor") {
-                const project = this.getCurrent();
+            const project = this.getCurrent();
+            if (!project) return;
 
-                if (project) {
-                    project.files[this.currentTab] = event.target.value;
-                }
+            if (event.target.id === "gameCodeEditor") {
+                project.files[this.currentTab] = event.target.value;
             }
 
-            if (event.target.id === "gameNameInput") {
-                const project = this.getCurrent();
+            if (event.target.id === "gameNameInput" &&
+                event.target.value.trim()) {
+                project.name = event.target.value;
+            }
+        });
 
-                if (project) {
-                    project.name = event.target.value;
-                }
+        document.addEventListener("keydown", event => {
+            if (event.key === "Escape") {
+                document.getElementById("gamePlayOverlay")?.remove();
             }
         });
 
