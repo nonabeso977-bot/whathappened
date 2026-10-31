@@ -1,690 +1,565 @@
+
 /* ========================================
    Friends Boxes Open ♡
-   Friends System
-   Supabase + Friends Box
+   Friends System - Rebuilt
+   Supabase
 ======================================== */
 
 const Friends = {
 
-    storageKey: "friends_local",
+    // إعدادات
+    codePrefix: "FRIEND-",
+    codeLength: 6,
 
+    getClient() {
+        if (typeof Online !== "undefined" && Online.client) {
+            return Online.client;
+        }
+
+        if (typeof supabaseClient !== "undefined") {
+            return supabaseClient;
+        }
+
+        throw new Error("Supabase client غير متصل");
+    },
+
+    async getUser() {
+        try {
+            const client = this.getClient();
+
+            const { data, error } =
+                await client.auth.getUser();
+
+            if (error) throw error;
+
+            return data.user || null;
+
+        } catch (error) {
+            console.error("Get user error:", error);
+            return null;
+        }
+    },
+
+    // إنشاء كود عشوائي
     generateCode() {
-
         const chars =
             "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
-        let code = "FRIEND-";
+        let result = this.codePrefix;
 
-        for (let i = 0; i < 6; i++) {
-            code +=
-                chars.charAt(
-                    Math.floor(
-                        Math.random() * chars.length
-                    )
-                );
-        }
+        const random = new Uint32Array(this.codeLength);
 
-        return code;
-    },
+        if (window.crypto && window.crypto.getRandomValues) {
+            window.crypto.getRandomValues(random);
 
-
-    async getUser() {
-
-        if (
-            typeof Online !== "undefined" &&
-            typeof Online.getUser === "function"
-        ) {
-            return await Online.getUser();
-        }
-
-        if (
-            typeof supabaseClient !== "undefined"
-        ) {
-            const {
-                data,
-                error
-            } =
-                await supabaseClient.auth.getUser();
-
-            if (
-                error ||
-                !data ||
-                !data.user
-            ) {
-                return null;
+            for (let i = 0; i < this.codeLength; i++) {
+                result += chars[random[i] % chars.length];
             }
 
-            return data.user;
+        } else {
+            for (let i = 0; i < this.codeLength; i++) {
+                result += chars.charAt(
+                    Math.floor(Math.random() * chars.length)
+                );
+            }
         }
 
-        return null;
+        return result;
     },
 
-
+    // تجهيز ملف المستخدم وإنشاء كود عند الحاجة
     async ensureProfile() {
-
-        const user =
-            await this.getUser();
-
-        if (!user) {
-            return null;
-        }
-
-        const {
-            data: existing,
-            error: findError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .select(
-                    "id, username, friend_code"
-                )
-                .eq("id", user.id)
-                .maybeSingle();
-
-        if (findError) {
-            console.error(
-                "Profile lookup error:",
-                findError
-            );
-
-            return null;
-        }
-
-
-        if (
-            existing &&
-            existing.friend_code
-        ) {
-            return existing;
-        }
-
-
-        let friendCode = null;
-        let attempts = 0;
-
-        while (
-            !friendCode &&
-            attempts < 10
-        ) {
-
-            const newCode =
-                this.generateCode();
-
-            const {
-                data: duplicate
-            } =
-                await supabaseClient
-                    .from("profiles")
-                    .select("id")
-                    .eq(
-                        "friend_code",
-                        newCode
-                    )
-                    .maybeSingle();
-
-            if (!duplicate) {
-                friendCode = newCode;
-            }
-
-            attempts++;
-        }
-
-
-        if (!friendCode) {
-            console.error(
-                "Could not generate unique friend code"
-            );
-
-            return null;
-        }
-
-
-        const username =
-            existing &&
-            existing.username
-                ? existing.username
-                : (
-                    user.email
-                        ? user.email.split("@")[0]
-                        : "مستخدم جديد"
-                );
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("profiles")
-                .upsert(
-                    {
-                        id: user.id,
-                        username: username,
-                        friend_code: friendCode
-                    },
-                    {
-                        onConflict: "id"
-                    }
-                )
-                .select()
-                .single();
-
-
-        if (error) {
-            console.error(
-                "Profile creation error:",
-                error
-            );
-
-            return null;
-        }
-
-        return data;
-    },
-
-
-    async loadMyCode() {
-
-        const element =
-            document.getElementById(
-                "friendCode"
-            );
-
-        if (!element) {
-            return;
-        }
-
-
-        const user =
-            await this.getUser();
-
+        const client = this.getClient();
+        const user = await this.getUser();
 
         if (!user) {
-
-            element.textContent =
-                "سجلي دخولك أولًا";
-
-            return;
+            console.warn("No logged-in user");
+            return null;
         }
-
-
-        const profile =
-            await this.ensureProfile();
-
-
-        if (
-            !profile ||
-            !profile.friend_code
-        ) {
-
-            element.textContent =
-                "FRIEND-......";
-
-            return;
-        }
-
-
-        element.textContent =
-            profile.friend_code;
-    },
-
-
-    async copyCode() {
-
-        const element =
-            document.getElementById(
-                "friendCode"
-            );
-
-        if (!element) {
-            return;
-        }
-
-        const code =
-            element.textContent.trim();
-
-
-        if (
-            !code ||
-            !code.startsWith("FRIEND-")
-        ) {
-            this.showMessage(
-                "ما فيش كود",
-                "سجلي دخولك أولًا باش نقدروا نعطوك كودك ♡"
-            );
-
-            return;
-        }
-
 
         try {
+            // البحث عن الملف الحالي
+            const { data: existing, error: findError } =
+                await client
+                    .from("profiles")
+                    .select("id, username, friend_code")
+                    .eq("id", user.id)
+                    .maybeSingle();
 
-            await navigator.clipboard.writeText(
-                code
-            );
+            if (findError) throw findError;
 
-            this.showMessage(
-                "تم النسخ ♡",
-                "كودك انسخ للحافظة"
+            // إذا كان لديه كود بالفعل، نستخدمه
+            if (
+                existing &&
+                existing.friend_code &&
+                existing.friend_code.trim()
+            ) {
+                return existing;
+            }
+
+            // تحديد اسم المستخدم
+            const username =
+                existing?.username ||
+                user.user_metadata?.username ||
+                user.email?.split("@")[0] ||
+                "مستخدم جديد";
+
+            // محاولة إنشاء كود فريد
+            for (let attempt = 0; attempt < 15; attempt++) {
+
+                const friendCode = this.generateCode();
+
+                const { data: duplicate, error: duplicateError } =
+                    await client
+                        .from("profiles")
+                        .select("id")
+                        .eq("friend_code", friendCode)
+                        .maybeSingle();
+
+                if (duplicateError) {
+                    throw duplicateError;
+                }
+
+                if (duplicate) {
+                    continue;
+                }
+
+                // إنشاء الملف أو تحديثه
+                const { data: profile, error: saveError } =
+                    await client
+                        .from("profiles")
+                        .upsert(
+                            {
+                                id: user.id,
+                                username: username,
+                                friend_code: friendCode
+                            },
+                            {
+                                onConflict: "id"
+                            }
+                        )
+                        .select("id, username, friend_code")
+                        .single();
+
+                if (!saveError) {
+                    console.log(
+                        "Friend profile ready:",
+                        profile.friend_code
+                    );
+
+                    return profile;
+                }
+
+                // إذا كان الكود مستخدماً بالفعل، نجرب غيره
+                if (saveError.code === "23505") {
+                    continue;
+                }
+
+                throw saveError;
+            }
+
+            throw new Error(
+                "تعذر إنشاء كود فريد بعد عدة محاولات"
             );
 
         } catch (error) {
+            console.error("Ensure profile error:", error);
 
-            console.error(
-                "Copy error:",
-                error
+            this.showMessage(
+                "تعذر إنشاء كود الصديق",
+                error.message || "حدث خطأ أثناء تجهيز حسابك"
             );
+
+            return null;
+        }
+    },
+
+    // عرض كود المستخدم
+    async loadMyCode() {
+        const element =
+            document.getElementById("friendCode");
+
+        if (!element) return;
+
+        element.textContent = "جاري تجهيز الكود...";
+
+        const user = await this.getUser();
+
+        if (!user) {
+            element.textContent = "سجلي دخولك أولاً";
+            return;
+        }
+
+        const profile = await this.ensureProfile();
+
+        if (!profile || !profile.friend_code) {
+            element.textContent = "تعذر تحميل الكود";
+            return;
+        }
+
+        element.textContent = profile.friend_code;
+    },
+
+    // نسخ الكود
+    async copyCode() {
+        const element =
+            document.getElementById("friendCode");
+
+        if (!element) return;
+
+        const code = element.textContent.trim();
+
+        if (!code.startsWith(this.codePrefix)) {
+            this.showMessage(
+                "لا يوجد كود",
+                "سجلي دخولك وانتظري تجهيز كودك أولاً"
+            );
+            return;
+        }
+
+        try {
+            await navigator.clipboard.writeText(code);
+
+            this.showMessage(
+                "تم النسخ ♡",
+                "تم نسخ كود الصديق"
+            );
+
+        } catch (error) {
+            console.error("Copy error:", error);
 
             this.showMessage(
                 "تعذر النسخ",
-                "اضغطي مطولًا على الكود وانسخيه يدويًا"
+                "اضغطي مطولاً على الكود وانسخيه يدوياً"
             );
         }
     },
 
-
+    // إضافة صديق
     async addFriend() {
+        const client = this.getClient();
 
         const input =
-            document.getElementById(
-                "friendCodeInput"
-            );
+            document.getElementById("friendCodeInput");
 
-        if (!input) {
-            return;
-        }
-
+        if (!input) return;
 
         const friendCode =
-            input.value
-                .trim()
-                .toUpperCase();
-
+            input.value.trim().toUpperCase();
 
         if (!friendCode) {
-
             this.showMessage(
-                "الكود فاضي",
-                "اكتبي كود الصديق أولًا ♡"
+                "الكود فارغ",
+                "اكتبي كود الصديق أولاً"
             );
-
             return;
         }
 
-
-        const user =
-            await this.getUser();
-
+        const user = await this.getUser();
 
         if (!user) {
-
             this.showMessage(
-                "لازم حساب",
-                "سجلي دخولك أولًا باش تضيفي أصدقاء"
+                "تسجيل الدخول مطلوب",
+                "سجلي دخولك أولاً"
             );
-
             return;
         }
 
+        // التأكد من تجهيز ملف المستخدم
+        const myProfile = await this.ensureProfile();
 
-        const myProfile =
-            await this.ensureProfile();
+        if (!myProfile) return;
 
-
-        if (!myProfile) {
-
-            this.showMessage(
-                "حصلت مشكلة",
-                "ما قدرناش نجهزوا حسابك في Friends Box"
-            );
-
-            return;
-        }
-
-
-        if (
-            friendCode ===
-            myProfile.friend_code
-        ) {
-
+        if (friendCode === myProfile.friend_code) {
             this.showMessage(
                 "هذا كودك أنتِ 🗿",
-                "ما تقدريش تضيفي روحك كصديقة"
+                "ما تقدريش تضيفي نفسك"
             );
-
             return;
         }
 
+        try {
+            // البحث عن صاحب الكود
+            const { data: friend, error: searchError } =
+                await client
+                    .from("profiles")
+                    .select("id, username, friend_code")
+                    .eq("friend_code", friendCode)
+                    .maybeSingle();
 
-        const {
-            data: friend,
-            error: friendError
-        } =
-            await supabaseClient
-                .from("profiles")
-                .select(
-                    "id, username, friend_code"
-                )
-                .eq(
-                    "friend_code",
-                    friendCode
-                )
-                .maybeSingle();
+            if (searchError) throw searchError;
 
-
-        if (friendError) {
-
-            console.error(
-                "Friend search error:",
-                friendError
-            );
-
-            this.showMessage(
-                "حصل خطأ",
-                "ما قدرناش نبحثوا عن الكود"
-            );
-
-            return;
-        }
-
-
-        if (!friend) {
-
-            this.showMessage(
-                "الكود غير موجود",
-                "تأكدي من الكود وجربي مرة ثانية"
-            );
-
-            return;
-        }
-
-
-        const {
-            data: alreadyFriend,
-            error: existingError
-        } =
-            await supabaseClient
-                .from("friendships")
-                .select(
-                    "id"
-                )
-                .or(
-                    `and(user_id.eq.${user.id},friend_id.eq.${friend.id}),and(user_id.eq.${friend.id},friend_id.eq.${user.id})`
-                )
-                .maybeSingle();
-
-
-        if (existingError) {
-
-            console.error(
-                "Friendship lookup error:",
-                existingError
-            );
-
-            this.showMessage(
-                "حصل خطأ",
-                "ما قدرناش نتحققوا من الصداقة"
-            );
-
-            return;
-        }
-
-
-        if (alreadyFriend) {
-
-            this.showMessage(
-                "مضاف من قبل ♡",
-                `${friend.username} موجود أصلًا في قائمة أصدقائك`
-            );
-
-            return;
-        }
-
-
-        const {
-            error: insertError
-        } =
-            await supabaseClient
-                .from("friendships")
-                .insert({
-                    user_id: user.id,
-                    friend_id: friend.id
-                });
-
-
-        if (insertError) {
-
-            console.error(
-                "Add friend error:",
-                insertError
-            );
-
-            this.showMessage(
-                "تعذر إضافة الصديق",
-                "تأكدي من إعداد جدول friendships والصلاحيات في Supabase"
-            );
-
-            return;
-        }
-
-
-        input.value = "";
-
-        await this.render();
-
-
-        this.showMessage(
-            "تمت الإضافة ♡",
-            `أضفنا ${friend.username} إلى أصدقائك`
-        );
-    },
-
-
-    async getFriends() {
-
-        const user =
-            await this.getUser();
-
-
-        if (!user) {
-            return [];
-        }
-
-
-        const {
-            data,
-            error
-        } =
-            await supabaseClient
-                .from("friendships")
-                .select(
-                    "friend_id, profiles!friendships_friend_id_fkey(id, username, friend_code)"
-                )
-                .eq(
-                    "user_id",
-                    user.id
+            if (!friend) {
+                this.showMessage(
+                    "الكود غير موجود",
+                    "تأكدي من كتابة الكود بشكل صحيح"
                 );
+                return;
+            }
 
+            // التأكد من عدم وجود العلاقة في أي اتجاه
+            const { data: existing, error: checkError } =
+                await client
+                    .from("friendships")
+                    .select("id")
+                    .or(
+                        `and(user_id.eq.${user.id},friend_id.eq.${friend.id}),and(user_id.eq.${friend.id},friend_id.eq.${user.id})`
+                    )
+                    .limit(1);
 
-        if (error) {
+            if (checkError) throw checkError;
 
-            console.error(
-                "Get friends error:",
-                error
+            if (existing && existing.length > 0) {
+                this.showMessage(
+                    "الصديق موجود بالفعل ♡",
+                    `${friend.username} موجود في قائمة أصدقائك`
+                );
+                return;
+            }
+
+            // إنشاء علاقة واحدة
+            const { error: insertError } =
+                await client
+                    .from("friendships")
+                    .insert({
+                        user_id: user.id,
+                        friend_id: friend.id
+                    });
+
+            if (insertError) throw insertError;
+
+            input.value = "";
+
+            await this.render();
+
+            this.showMessage(
+                "تمت الإضافة ♡",
+                `أصبحت ${friend.username} ضمن قائمة أصدقائك`
+            );
+
+        } catch (error) {
+            console.error("Add friend error:", error);
+
+            this.showMessage(
+                "تعذرت إضافة الصديق",
+                error.message || "حدث خطأ غير معروف"
+            );
+        }
+    },
+
+    // جلب الأصدقاء من الاتجاهين
+    async getFriends() {
+        const client = this.getClient();
+        const user = await this.getUser();
+
+        if (!user) return [];
+
+        try {
+            const { data: relations, error } =
+                await client
+                    .from("friendships")
+                    .select("user_id, friend_id")
+                    .or(
+                        `user_id.eq.${user.id},friend_id.eq.${user.id}`
+                    );
+
+            if (error) throw error;
+
+            if (!relations || relations.length === 0) {
+                return [];
+            }
+
+            // استخراج معرفات الطرف الآخر
+            const friendIds = [
+                ...new Set(
+                    relations.map(row =>
+                        row.user_id === user.id
+                            ? row.friend_id
+                            : row.user_id
+                    )
+                )
+            ];
+
+            if (friendIds.length === 0) return [];
+
+            const { data: profiles, error: profileError } =
+                await client
+                    .from("profiles")
+                    .select("id, username, friend_code")
+                    .in("id", friendIds);
+
+            if (profileError) throw profileError;
+
+            return profiles || [];
+
+        } catch (error) {
+            console.error("Get friends error:", error);
+
+            this.showMessage(
+                "تعذر تحميل الأصدقاء",
+                error.message || "حدث خطأ أثناء تحميل القائمة"
             );
 
             return [];
         }
-
-
-        return (data || [])
-            .map(row => row.profiles)
-            .filter(Boolean);
     },
 
-
+    // عرض قائمة الأصدقاء
     async render() {
-
         const container =
-            document.getElementById(
-                "friendsList"
-            );
+            document.getElementById("friendsList");
 
-        if (!container) {
-            return;
-        }
+        if (!container) return;
 
-
-        const user =
-            await this.getUser();
-
+        const user = await this.getUser();
 
         if (!user) {
-
             container.innerHTML = `
                 <div class="empty-state small">
-                    <div class="empty-icon">
-                        ♡
-                    </div>
-
-                    <p>
-                        سجلي دخولك باش تشوفي أصدقاءك
-                    </p>
+                    <div class="empty-icon">♡</div>
+                    <p>سجلي دخولك باش تشوفي أصدقاءك</p>
                 </div>
             `;
-
             return;
         }
 
+        container.innerHTML = `
+            <div class="empty-state small">
+                <p>جاري تحميل الأصدقاء...</p>
+            </div>
+        `;
 
-        const friends =
-            await this.getFriends();
-
+        const friends = await this.getFriends();
 
         if (!friends.length) {
-
             container.innerHTML = `
                 <div class="empty-state small">
-                    <div class="empty-icon">
-                        ♡
-                    </div>
-
-                    <p>
-                        ما عندكش أصدقاء مضافين لحد الآن ♡
-                    </p>
-
-                    <small>
-                        خذي كود صديقك وأضيفيه هنا
-                    </small>
+                    <div class="empty-icon">♡</div>
+                    <p>ما عندكش أصدقاء مضافين لحد الآن ♡</p>
+                    <small>استخدمي كود صديقك لإضافته</small>
                 </div>
             `;
-
             return;
         }
-
 
         container.innerHTML = "";
 
+        friends.forEach(friend => {
+            const item = document.createElement("div");
 
-        friends.forEach(
-            friend => {
+            item.className = "friend-item";
 
-                const item =
-                    document.createElement(
-                        "div"
-                    );
+            const avatar = document.createElement("div");
+            avatar.className = "friend-avatar";
+            avatar.textContent = "♡";
 
-                item.className =
-                    "friend-item";
+            const info = document.createElement("div");
+            info.className = "friend-info";
 
+            const name = document.createElement("strong");
+            name.textContent = friend.username || "مستخدم";
 
-                item.innerHTML = `
-                    <div class="friend-avatar">
-                        ♡
-                    </div>
+            const code = document.createElement("small");
+            code.textContent = friend.friend_code || "";
 
-                    <div class="friend-info">
-                        <strong>
-                            ${this.escapeHTML(
-                                friend.username ||
-                                "مستخدم"
-                            )}
-                        </strong>
+            info.appendChild(name);
+            info.appendChild(code);
 
-                        <small>
-                            ${this.escapeHTML(
-                                friend.friend_code ||
-                                ""
-                            )}
-                        </small>
-                    </div>
+            const chatButton = document.createElement("button");
+            chatButton.type = "button";
+            chatButton.className =
+                "secondary-button friend-chat-button";
+            chatButton.textContent = "دردشة ♡";
+            chatButton.dataset.friendId = friend.id;
 
-                    <button
-                        type="button"
-                        class="secondary-button friend-chat-button"
-                        data-friend-id="${friend.id}"
-                    >
-                        دردشة ♡
-                    </button>
-                `;
+            item.appendChild(avatar);
+            item.appendChild(info);
+            item.appendChild(chatButton);
 
-
-                container.appendChild(
-                    item
-                );
-            }
-        );
+            container.appendChild(item);
+        });
     },
 
+    // تحديث الواجهة بعد تسجيل الدخول
+    async refresh() {
+        await this.loadMyCode();
+        await this.render();
+    },
 
+    // رسائل التطبيق
     showMessage(title, content) {
-
         if (
             typeof App !== "undefined" &&
             typeof App.openMessage === "function"
         ) {
-
-            App.openMessage(
-                title,
-                content
-            );
-
-            return;
+            App.openMessage(title, content);
+        } else {
+            alert(title + "\n\n" + content);
         }
-
-
-        alert(
-            title + "\n\n" + content
-        );
     },
 
+    escapeHTML(value) {
+        return String(value)
+            .replace(/&/g, "&amp;")
+            .replace(/</g, "&lt;")
+            .replace(/>/g, "&gt;")
+            .replace(/"/g, "&quot;")
+            .replace(/'/g, "&#039;");
+    },
 
-    escapeHTML(text) {
+    // ربط الأزرار
+    init() {
+        const copyButton =
+            document.getElementById("copyFriendCode");
 
-        return String(text)
-            .replace(
-                /&/g,
-                "&amp;"
-            )
-            .replace(
-                /</g,
-                "&lt;"
-            )
-            .replace(
-                />/g,
-                "&gt;"
-            )
-            .replace(
-                /"/g,
-                "&quot;"
-            )
-            .replace(
-                /'/g,
-                "&#039;"
-            );
+        const addButton =
+            document.getElementById("addFriendButton");
+
+        const input =
+            document.getElementById("friendCodeInput");
+
+        if (copyButton) {
+            copyButton.addEventListener("click", () => {
+                this.copyCode();
+            });
+        }
+
+        if (addButton) {
+            addButton.addEventListener("click", () => {
+                this.addFriend();
+            });
+        }
+
+        if (input) {
+            input.addEventListener("keydown", event => {
+                if (event.key === "Enter") {
+                    this.addFriend();
+                }
+            });
+        }
+
+        // أول تحميل
+        this.refresh();
+
+        // متابعة تسجيل الدخول والخروج
+        window.addEventListener(
+            "supabase-auth-change",
+            async event => {
+                if (event.detail && event.detail.user) {
+                    await this.refresh();
+                } else {
+                    const code =
+                        document.getElementById("friendCode");
+
+                    if (code) {
+                        code.textContent = "سجلي دخولك أولاً";
+                    }
+
+                    await this.render();
+                }
+            }
+        );
     }
-
 };
 
 
@@ -692,68 +567,6 @@ const Friends = {
    تشغيل النظام
 ======================================== */
 
-document.addEventListener(
-    "DOMContentLoaded",
-    async () => {
-
-        await Friends.loadMyCode();
-
-        await Friends.render();
-
-
-        const copyButton =
-            document.getElementById(
-                "copyFriendCode"
-            );
-
-        if (copyButton) {
-
-            copyButton.addEventListener(
-                "click",
-                () => {
-                    Friends.copyCode();
-                }
-            );
-        }
-
-
-        const addButton =
-            document.getElementById(
-                "addFriendButton"
-            );
-
-        if (addButton) {
-
-            addButton.addEventListener(
-                "click",
-                () => {
-                    Friends.addFriend();
-                }
-            );
-        }
-
-
-        const input =
-            document.getElementById(
-                "friendCodeInput"
-            );
-
-        if (input) {
-
-            input.addEventListener(
-                "keydown",
-                event => {
-
-                    if (
-                        event.key ===
-                        "Enter"
-                    ) {
-                        Friends.addFriend();
-                    }
-
-                }
-            );
-        }
-
-    }
-);
+document.addEventListener("DOMContentLoaded", () => {
+    Friends.init();
+});
