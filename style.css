@@ -1951,3 +1951,23 @@ body.menu-open {
         font-size: 10px;
     }
 }
+/* ========================================
+   About & Gratitude
+======================================== */
+
+.gratitude-card {
+    line-height: 2;
+}
+
+.gratitude-card p {
+    margin: 14px 0;
+    line-height: 2;
+}
+
+.gratitude-signature {
+    text-align: center;
+    color: var(--theme-primary);
+    font-weight: 600;
+    padding-top: 12px;
+    border-top: 1px solid var(--theme-border);
+}
