@@ -1,0 +1,203 @@
+
+/* Friends Boxes Open - Private Room */
+
+.room-page {
+    max-width: 680px;
+}
+
+.room-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-bottom: 18px;
+}
+
+.room-top h2 {
+    margin: 0;
+    font-size: 20px;
+}
+
+.room-top p {
+    margin: 5px 0 0;
+    color: var(--theme-muted);
+    font-size: 13px;
+}
+
+.room-back {
+    width: 43px;
+    height: 43px;
+    border-radius: 14px;
+    background: var(--theme-card);
+    color: var(--theme-text);
+    border: 1px solid var(--theme-border);
+    font-size: 22px;
+}
+
+.room-stage {
+    position: relative;
+    width: 100%;
+    aspect-ratio: 1 / 1;
+    overflow: hidden;
+    border: 5px solid var(--theme-card);
+    border-radius: 25px;
+    box-shadow: var(--shadow-soft);
+    background-color: #cba982;
+    background-image:
+        linear-gradient(rgba(90,60,35,.10) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(90,60,35,.10) 1px, transparent 1px);
+    background-size: 42px 42px;
+    padding: 12px;
+}
+
+.room-wall {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 13%;
+    background: #a97858;
+    border-bottom: 7px solid #80583e;
+}
+
+.room-rug {
+    position: absolute;
+    width: 56%;
+    height: 42%;
+    left: 22%;
+    top: 34%;
+    border-radius: 48%;
+    background: #d9b8a2;
+    border: 7px solid rgba(255,255,255,.24);
+    box-shadow: 0 5px 12px rgba(0,0,0,.12);
+}
+
+.room-object {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 2px solid rgba(80,55,35,.25);
+    border-radius: 16px;
+    background: #f2dfc7;
+    color: #49382e;
+    box-shadow: 0 5px 0 rgba(80,55,35,.18);
+    min-width: 76px;
+    min-height: 68px;
+    padding: 8px;
+    transition: transform .15s ease, filter .15s ease;
+}
+
+.room-object:active {
+    transform: scale(.94);
+    filter: brightness(.95);
+}
+
+.room-object .object-icon {
+    font-size: 30px;
+    line-height: 1.2;
+}
+
+.room-object small {
+    font-size: 11px;
+    font-weight: 700;
+}
+
+.room-sofa {
+    bottom: 15%;
+    right: 7%;
+    width: 34%;
+    height: 23%;
+    background: #b77c76;
+    color: white;
+}
+
+.room-tv {
+    top: 19%;
+    left: 7%;
+    width: 29%;
+    height: 20%;
+    background: #4d5364;
+    color: white;
+}
+
+.room-album {
+    top: 20%;
+    right: 8%;
+}
+
+.room-clock {
+    bottom: 17%;
+    left: 8%;
+}
+
+.room-plant {
+    position: absolute;
+    z-index: 1;
+    font-size: 31px;
+    pointer-events: none;
+}
+
+.room-plant.one {
+    top: 17%;
+    left: 43%;
+}
+
+.room-plant.two {
+    bottom: 12%;
+    left: 45%;
+}
+
+.room-window {
+    position: absolute;
+    top: 2%;
+    left: 43%;
+    width: 20%;
+    height: 10%;
+    border: 4px solid #80583e;
+    border-radius: 5px;
+    background: #a9d9ed;
+}
+
+.room-status {
+    margin-top: 15px;
+    padding: 13px;
+    border-radius: 16px;
+    background: var(--theme-card);
+    border: 1px solid var(--theme-border);
+    color: var(--theme-muted);
+    text-align: center;
+    font-size: 13px;
+}
+
+.room-action-panel {
+    margin-top: 14px;
+    padding: 16px;
+    border-radius: 20px;
+    background: var(--theme-card);
+    border: 1px solid var(--theme-border);
+    box-shadow: var(--shadow-soft);
+}
+
+.room-action-panel h3 {
+    margin: 0 0 8px;
+    color: var(--theme-text);
+}
+
+.room-action-panel p {
+    color: var(--theme-muted);
+    line-height: 1.7;
+    margin: 0 0 12px;
+}
+
+.room-action-panel button {
+    width: 100%;
+}
+
+.room-help {
+    margin: 12px 3px;
+    color: var(--theme-muted);
+    font-size: 12px;
+    line-height: 1.7;
+}
